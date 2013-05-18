@@ -6,7 +6,7 @@
 
 namespace Gitten;
 
-final class LocalFile
+final class LocalFile extends File
 {
     /** The path to the file relative to the repository base directory. */
     private $path;

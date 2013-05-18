@@ -6,7 +6,7 @@
 
 namespace Gitten;
 
-final class RepoFile
+final class RepoFile extends File
 {
     /** The repository. */
     private $repo;
@@ -202,6 +202,17 @@ final class RepoFile
         if (!$this->lastCommit)
             $this->lastCommit = $this->repo->getLastCommit($this);
         return $this->lastCommit;
+    }
+    
+    /**
+     * Returns the last modified timestamp.
+     * 
+     * @return DateTime
+     *             The last modified timestamp.
+     */
+    public function getLastModified()
+    {
+    	return $this->getLastCommit()->getAuthorDate();
     }
 
     /**
