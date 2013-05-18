@@ -352,6 +352,12 @@ nav.repository-breadcrumb
     font-size: 16px;
 }
 
+.readme pre
+{
+    width: 100%;
+    white-space: pre-wrap;
+}
+
 footer
 {
     margin-top: 75px;

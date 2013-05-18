@@ -51,6 +51,14 @@
       </tr>
     <? endforeach ?>
   </table>
+
+  <? $readme = $repoFile->getReadmeHTML() ?>
+  <? if ($readme): ?>
+    <div class="textfile">
+      <?=$readme?>
+    </div>
+  <? endif ?>
+
 </div>
 
 <? include "parts/footer.php" ?>

@@ -26,6 +26,9 @@ final class RepoFile
     /** Cached last commit. */
     private $lastCommit;
 
+    /** The cached children. Access with getChildren(). */
+    private $children = null;
+
     /**
      * Constructs a new repository file.
      *
@@ -152,11 +155,29 @@ final class RepoFile
      * no children or if the current file is not a directory. The children
      * are sorted alphabetically with the directories at the top.
      *
-     * @return File[] The children files. May be empty.
+     * @return RepoFile[] The children files. May be empty.
      */
     public function getChildren()
     {
-        return $this->repo->getChildren($this);
+        if (is_null($this->children))
+        {
+            $this->children = $this->repo->getChildren($this);
+        }
+        return $this->children;
+    }
+
+    /**
+     * Returns the child with the specified name. Returns null if there is
+     * no child with this name.
+     *
+     * @param string $name
+     *            The name of the desired child.
+     * @return RepoFile
+     *            The child or null of not found.
+     */
+    public function getChild($name)
+    {
+        return $this->repo->getChild($this, $name);
     }
 
     /**
@@ -181,5 +202,45 @@ final class RepoFile
         if (!$this->lastCommit)
             $this->lastCommit = $this->repo->getLastCommit($this);
         return $this->lastCommit;
+    }
+
+    /**
+     * Reads the raw content of this file.
+     *
+     * @return string
+     *            The raw content of this file.
+     */
+    public function read()
+    {
+        return $this->repo->readFile($this);
+    }
+
+    /**
+     * Returns the HTML code of the README in this dirctory. Returns null
+     * if this repository file is not a directory or if it does not contain
+     * a README file.
+     *
+     * @return string
+     *            The HTML code of the README in this directory or null
+     *            if current file is not a directory or there is no README.
+     */
+    public function getReadmeHTML()
+    {
+        $children = $this->getChildren();
+        foreach ($children as $child)
+        {
+            $name = strtolower($child->getName());
+            if ($name == "readme.md")
+            {
+                return "<div class=\"markdown\">"
+                    . \Michelf\Markdown::defaultTransform($child->read())
+                    . "</div>";
+            }
+            else if ($name == "readme" || $name == "readme.txt")
+            {
+                return "<pre class=\"txt\">" . htmlspecialchars($child->read()) . "</pre>";
+            }
+        }
+        return null;
     }
 }
