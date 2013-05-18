@@ -8,6 +8,9 @@ namespace Gitten;
 
 abstract class File
 {
+    /** The cached mime type. Access it with getMimeType(). */
+    private $mimeType = null;
+
     /**
      * Returns the path to this file. The path is relative to the repository
      * base directory. When the file is the repository base directory itself
@@ -19,6 +22,12 @@ abstract class File
      */
     abstract function getPath();
 
+    /**
+     * Returns the URL of this file.
+     *
+     * @return string
+     *             The URL.
+     */
     abstract function getUrl();
 
     /**
@@ -147,4 +156,38 @@ abstract class File
         }
         return null;
     }
+
+    /**
+     * Returns the mime type of the file.
+     *
+     * @return string
+     *             The mime type.
+     */
+    public function getMimeType()
+    {
+        if (is_null($this->mimeType))
+        {
+            if ($this->isDirectory())
+            {
+                $mimeType = "text/directory";
+            }
+            else
+           {
+                $content = $this->getContent();
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($finfo, $content);
+                finfo_close($finfo);
+
+                // Correct mime type of markdown files.
+                if ($mimeType == "text/plain" &&
+                    preg_match("/.*\\.md\$/", $this->getName()))
+                {
+                    $mimeType = "text/x-web-markdown";
+                }
+            }
+            $this->mimeType = $mimeType;
+        }
+        return $this->mimeType;
+    }
+
 }
