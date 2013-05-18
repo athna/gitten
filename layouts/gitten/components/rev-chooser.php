@@ -6,7 +6,7 @@
     <span class="rev-name"><?=$repo->getShortRevision()?></span>
   </button>
   <div class="popup">
-    <input type="text" class="filter" placeholder="Filter branches" />
+    <input type="text" class="filter" placeholder="Filter branches and tags" />
     <div class="type branches<?if ($revType == "branch"): ?> active<? endif?>">
       <h3><a href="#" data-type="branches">Branches</a></h3>
       <ul data-type="branches">
