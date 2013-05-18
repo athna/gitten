@@ -20,11 +20,12 @@ you.
 
 Not yet implemented stuff:
 
-* File/Blob viewer.
-* Commit viewer.
-* Commit history.
+* File/Blob viewer
+* Commit viewer
+* Commit history
 * Blame
-* Asynchronous loading of expensive commit info in tree.
+* Asynchronous loading of expensive commit info in tree
+* Displaying README files under the tree
 
 
 ## Dependencies
