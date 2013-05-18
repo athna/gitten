@@ -11,8 +11,10 @@ final class Gitten
     /**
      * Execute the application.
      */
-    private function execute()
+    public function execute()
     {
+    	global $cfg;
+    	
         // Parse path info
         $pathInfo = trim(isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"]
             : "", "/");
@@ -80,7 +82,7 @@ final class Gitten
 
         // Display the view (in an anonymous function to get a clean local
         // variable scope and to prevent access to the current object)
-        $this->view($view, $localFile, $repo, $repoFile, $args, $params);
+        $this->view($view, $localFile, $repo, $repoFile, $args, $params, $cfg);
     }
 
     /**
@@ -98,12 +100,12 @@ final class Gitten
      *            The request arguments.
      * @param string[string] params
      *            The request parameters.
+     * @param Config $cfg
+     *            The configuration.
      */
     private function view($view, LocalFile $localFile, $repo, $repoFile,
-        $args, $params)
+        $args, $params, $cfg)
     {
-        global $cfg;
-
         require($view . ".php");
     }
 
