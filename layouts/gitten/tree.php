@@ -52,7 +52,7 @@
     <? endforeach ?>
   </table>
 
-  <? $readme = $repoFile->getReadmeHTML() ?>
+  <? $readme = $repoFile->getReadMeHTML() ?>
   <? if ($readme): ?>
     <div class="readme">
       <?=$readme?>

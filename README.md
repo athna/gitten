@@ -9,6 +9,7 @@ Some features:
 * Easy installation
 * Fully themable
 * Supports multiple repositories
+* Displays README (markdown, txt or html) under tree
 
 
 ## TODO
@@ -25,7 +26,6 @@ Not yet implemented stuff:
 * Commit history
 * Blame
 * Asynchronous loading of expensive commit info in tree
-* Displaying README files under the tree
 * Better error handling (404 and stuff like that)
 
 

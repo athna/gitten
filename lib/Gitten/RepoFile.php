@@ -225,37 +225,4 @@ final class RepoFile extends File
     {
         return $this->repo->readFile($this);
     }
-
-    /**
-     * Returns the HTML code of the README in this dirctory. Returns null
-     * if this repository file is not a directory or if it does not contain
-     * a README file.
-     *
-     * @return string
-     *            The HTML code of the README in this directory or null
-     *            if current file is not a directory or there is no README.
-     */
-    public function getReadmeHTML()
-    {
-        $children = $this->getChildren();
-        foreach ($children as $child)
-        {
-            $name = strtolower($child->getName());
-            if ($name == "readme.md")
-            {
-                return \Michelf\Markdown::defaultTransform($child->read());
-            }
-            else if ($name == "readme" || $name == "readme.txt")
-            {
-                return "<p>" . nl2br(htmlspecialchars($child->read())) . "</p>";
-            }
-            else if ($name == "readme.html" || $name == "readme.htm")
-            {
-            	return strip_tags($child->read(), "<h1><h2><h3><h4><h5>"
-                    . "<h6><p><code><pre><strong><em><i><b><br><ul><ol>"
-            		. "<li><a><img>");
-            }
-        }
-        return null;
-    }
 }
