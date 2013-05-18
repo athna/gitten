@@ -190,4 +190,25 @@ abstract class File
         return $this->mimeType;
     }
 
+    /**
+     * Checks if file is a binary file.
+     *
+     * @return boolean
+     *            True if file is binary, false if not.
+     */
+    public function isBinary()
+    {
+        return !preg_match("/^text\\/.*/", $this->getMimeType());
+    }
+
+    /**
+     * Checks if file is an image.
+     *
+     * @return boolean
+     *            True if file is an image, false if not.
+     */
+    public function isImage()
+    {
+        return preg_match("/^image\\/.*/", $this->getMimeType());
+    }
 }
