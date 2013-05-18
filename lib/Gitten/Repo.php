@@ -313,6 +313,32 @@ final class Repo
         return $children;
     }
 
+
+    /**
+     * Returns a specific child from the specified directory.
+     *
+     * @param RepoFile $directory
+     *            The directory in which to search for the file.
+     * @param string $name
+     *            The name of the child to return.
+     * @return RepoFile
+     *            The child or null if not found.
+     */
+    public function getChild(RepoFile $directory, $name)
+    {
+        $line = $this->gitString("ls-tree", "-l", $this->revisionHash,
+            $directory->getPath() . "/" . $name);
+        if (!$line) return null;
+        $columns = preg_split('/\s+/', trim($line), 5);
+        $mode = octdec($columns[0]);
+        $type = $columns[1];
+        $size = $columns[3];
+        $size = $size == "-" ? 0 : intval($size);
+        $file = basename($columns[4]);
+        return new RepoFile($this, $directory->getPath() . "/" . $file,
+            $type == "blob" ? "file" : "directory", $size, $mode);
+    }
+
     /**
      * Returns the current branch.
      *
@@ -504,6 +530,24 @@ final class Repo
         $commit = $commits[0];
         $this->writeCache($cacheKey, $commit);
         return $commit;
+    }
+
+    /**
+     * Returns the raw content of a file.
+     *
+     * @param RepoFile $file
+     *            The file to read.
+     * @return string
+     *            The raw file content.
+     */
+    public function readFile(RepoFile $file)
+    {
+        $result = "";
+        $this->gitForEachLine(function($row) use (&$result)
+        {
+            $result .= $row;
+        }, "show", $this->revisionHash . ":" .$file->getPath());
+        return $result;
     }
 
     /**
