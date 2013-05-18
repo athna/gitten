@@ -13,8 +13,8 @@ final class Gitten
      */
     public function execute()
     {
-    	global $cfg;
-    	
+        global $cfg;
+        
         // Parse path info
         $pathInfo = trim(isset($_SERVER["PATH_INFO"]) ? $_SERVER["PATH_INFO"]
             : "", "/");

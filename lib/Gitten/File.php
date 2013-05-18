@@ -139,9 +139,9 @@ abstract class File
             }
             else if ($name == "readme.html" || $name == "readme.htm")
             {
-            	return strip_tags($child->read(), "<h1><h2><h3><h4><h5>"
+                return strip_tags($child->read(), "<h1><h2><h3><h4><h5>"
                     . "<h6><p><code><pre><strong><em><i><b><br><ul><ol>"
-            		. "<li><a><img>");
+                    . "<li><a><img>");
             }
         }
         return null;

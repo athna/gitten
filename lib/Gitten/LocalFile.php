@@ -253,6 +253,6 @@ final class LocalFile extends File
      */
     public function read()
     {
-    	return file_get_contents($this->getAbsolutePath());
+        return file_get_contents($this->getAbsolutePath());
     }
 }

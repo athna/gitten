@@ -212,7 +212,7 @@ final class RepoFile extends File
      */
     public function getLastModified()
     {
-    	return $this->getLastCommit()->getAuthorDate();
+        return $this->getLastCommit()->getAuthorDate();
     }
 
     /**
