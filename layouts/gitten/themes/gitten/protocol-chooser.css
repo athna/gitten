@@ -1,0 +1,89 @@
+.gitten-protocol-chooser
+{
+    position: relative;
+}
+
+.gitten-protocol-chooser input[type=text]
+{
+    font-family: "Liberation Mono", Courier, monospace;
+    width: 350px;
+    cursor: text;
+    vertical-align: bottom;
+}
+
+.gitten-protocol-chooser button
+{
+    padding-left: 30px;
+    margin-right: 0;
+    min-width: 35px;
+    text-align: left;
+    vertical-align: bottom;
+}
+
+.gitten-protocol-chooser button:before
+{
+    content: "\f08e";
+    color: #222;
+    font-family: Icons;
+    font-size: 14px;
+    position: absolute;
+    top: 7px;
+    left: 10px;
+}
+
+.gitten-protocol-chooser .popup
+{
+    list-style: none;
+    margin: 0;
+    padding: 5px 0;
+    position: absolute;
+    left: 0px;
+    top: 45px;
+    width: 75px;
+    background: #eee;
+    border: solid 1px #ccc;
+    z-index: 10000;
+    border-radius: 5px;
+    box-shadow: 0px 0px 20px #888;
+}
+
+.gitten-protocol-chooser .popup:after
+{
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: -9px;
+    width: 17px;
+    height: 9px;
+    background-image: url(images/popuparrow.png);
+    background-position: bottom center;
+    background-repeat: no-repeat;    
+}
+
+.gitten-protocol-chooser .popup li
+{
+    display: block;
+}
+
+.gitten-protocol-chooser li a
+{
+    padding: 5px 10px;
+    display: block;
+    text-decoration: none;
+    color: #222;
+}
+
+.gitten-protocol-chooser li a:hover
+{
+    background: #ccc;   
+}
+
+.gitten-protocol-chooser .auto-close-layer
+{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+}

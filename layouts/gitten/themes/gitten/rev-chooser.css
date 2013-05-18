@@ -1,0 +1,164 @@
+.gitten-rev-chooser
+{
+    display: inline-block;
+    position: relative;    
+}
+
+.gitten-rev-chooser button .rev-type
+{
+    color: #888;
+}
+
+.gitten-rev-chooser button
+{
+    padding-left: 25px;
+    margin-right: 10px;
+}
+
+.gitten-rev-chooser button:before
+{
+    color: #222;
+    font-family: Icons;
+    position: absolute;
+    left: 10px;
+}
+
+.gitten-rev-chooser button.branch:before
+{
+    content: "\f126";
+    font-size: 16px;
+    top: 5px;
+}
+    
+.gitten-rev-chooser button.tag:before
+{
+    content: "\f02b";
+    font-size: 13px;
+    top: 7px;
+}
+    
+.gitten-rev-chooser button.tree:before
+{
+    font-family: Arial, sans-serif;
+    content: "#";
+}
+    
+.gitten-rev-chooser .popup
+{
+    position: absolute;
+    left: 0;
+    top: 45px;
+    background: #eee;
+    border: solid 1px #ccc;
+    z-index: 10000;
+    width: 256px;
+    height: 256px;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0px 0px 20px #888;
+}
+
+.gitten-rev-chooser .popup:after
+{
+    content: "";
+    position: absolute;
+    left: 25px;
+    top: -9px;
+    width: 17px;
+    height: 9px;
+    background-image: url(images/popuparrow.png);
+    background-position: bottom center;
+    background-repeat: no-repeat;    
+}
+
+.gitten-rev-chooser .auto-close-layer
+{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+}
+
+.gitten-rev-chooser input
+{
+    margin: 10px;
+    display: block;
+    width: 222px;
+}
+
+.gitten-rev-chooser .type ul
+{
+    display: none;
+    margin: 0;
+    list-style: none;
+    background: #fff;
+    position: absolute;
+    padding: 10px;
+    left: 0;
+    bottom: 0;
+    width: 236px;
+    height: 162px;
+    overflow: auto;
+    border-top: 1px solid #ccc;
+    z-index: 1;
+}
+
+.gitten-rev-chooser .type.active ul
+{
+    display: block;
+}
+
+.gitten-rev-chooser .type ul.loading
+{
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-image: url(animations/loading.gif);
+}
+
+.gitten-rev-chooser .type h3
+{
+    position: relative;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+}
+
+.gitten-rev-chooser .type h3 a
+{
+    display: block;
+    position: relative;
+    float: left;
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    padding: 5px 10px;
+    border: solid 1px #eee;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+    height: 15px;
+    color: #888;
+}
+
+.gitten-rev-chooser .type.active h3 a
+{
+    border-color: #ccc;
+    background: #fff;
+    color: #000;
+}
+
+.gitten-rev-chooser .type.branches h3 a
+{
+    margin-left: 10px;
+}
+
+.gitten-rev-chooser .type h3 a:hover
+{
+    color: #222;
+    text-decoration: none;
+}
+
+.gitten-rev-chooser .type ul li
+{
+    padding: 4px;
+}

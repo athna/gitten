@@ -1,0 +1,394 @@
+@import "fonts.css";
+@import "rev-chooser.css";
+@import "protocol-chooser.css";
+
+html
+{
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #222;
+}
+
+a
+{
+    text-decoration: none;
+    color: #26f;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+a.gravatar
+{
+    display: inline-block;
+    border: 1px solid #ddd;
+    padding: 1px;   
+    background: #fff;
+}
+
+a img
+{
+    display: block;
+    border: 0;
+}
+ 
+a.gravatar img
+{
+    width: 100%;
+    height: 100%;
+}
+
+table
+{
+    border-collapse: collapse;;
+    border-spacing: 0;
+}
+
+input[type=text]
+{
+    position: relative;
+    display: inline-block;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    border: 1px solid #ddd;
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 14px;
+    height: 16px;
+    vertical-align: baseline;
+}
+
+button
+{
+    position: relative;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    vertical-align: baseline;
+    display: inline-block;
+    border: solid 1px #ccc;
+    border-radius: 2px;
+    padding: 5px 10px;
+    color: #222;
+    background: #eee;
+    background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
+    background: linear-gradient(to bottom, #fff 0%, #eee 100%);
+    cursor: pointer;
+    line-height: 14px;
+    height: 16px;
+}
+
+button:hover
+{
+    background: #ddd;
+    background: -webkit-linear-gradient(top, #eee 0%, #ddd 100%);
+    background: linear-gradient(to bottom, #eee 0%, #ddd 100%);
+}
+
+button:active, button.dropdown.open
+{
+    border-color: #aaa;
+    background: #eee;
+    background: -webkit-linear-gradient(top, #ddd 0%, #eee 100%);
+    background: linear-gradient(to bottom, #ddd 0%, #eee 100%);
+}
+
+button.dropdown:active:after, button.dropdown.open:after
+{
+    border-color: #aaa;
+}
+
+button.dropdown
+{
+    padding-right: 30px;
+}
+
+button.dropdown:after
+{
+    content: "\f078";
+    font-family: Icons;
+    font-size: 10px;
+    padding: 6px 5px 4px 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    line-height: 14px;
+    height: 16px;
+    border-left: solid 1px #ccc;    
+}
+
+button.dropdown.open:after
+{
+    content: "\f077";
+}
+
+.content
+{
+    position: relative;
+    margin: 0 auto;
+    width: 980px;
+    clear: both;
+}
+
+nav.file-breadcrumb
+{
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 25px;
+}
+
+nav.file-breadcrumb.repository
+{
+    margin-bottom: 0;
+}
+
+nav.file-breadcrumb .content
+{
+    background-repeat: no-repeat;
+    background-position: 0 10px;
+    padding: 10px 0;
+}
+
+nav.file-breadcrumb.directory .content
+{
+    background-image: url(icons/64/directory.png);    
+}
+
+nav.file-breadcrumb.repository .content
+{
+    background-image: url(icons/64/repository.png);    
+}
+
+nav.file-breadcrumb.file .content
+{
+    background-image: url(icons/64/file.png);    
+}
+
+nav.file-breadcrumb h1
+{
+    margin: 20px 0 16px 74px;
+    font-weight: normal;
+    font-size: 24px;
+}
+
+nav.file-breadcrumb .repo-protocol
+{
+    position: absolute;
+    top: 30px;
+    right: 10px;    
+}
+
+table.directory
+{
+    width: 100%;
+}
+
+table.directory tr:hover
+{
+    background: #eee;
+}
+
+table.directory td
+{
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    padding: 8px 8px;
+}
+
+table.directory td.name
+{
+    padding-left: 40px;
+    background-repeat: no-repeat;
+    background-position: 16px center;
+    white-space: nowrap;
+}
+
+table.directory tr.directory td.name
+{
+    background-image: url(icons/16/directory.png);
+}
+
+table.directory tr.file td.name
+{
+    background-image: url(icons/16/file.png);
+}
+
+table.directory tr.repository td.name
+{
+    background-image: url(icons/16/repository.png);
+}
+
+table.directory td.lastModified,
+table.directory td.size
+{
+    white-space: nowrap;
+}
+
+table.directory td.authorAvatar
+{
+    padding-right: 0;
+    width: 16px;
+}
+
+table.directory td.authorAvatar .gravatar
+{
+    width: 16px;
+    height: 16px;
+}
+
+table.directory td.author
+{
+    white-space: nowrap;
+    padding-left: 5px;
+}
+
+table.directory td.message
+{
+    width: 100%;
+}
+
+div.shortened-text-container
+{
+    position: relative;
+    height: 16px;
+    overflow: hidden;
+}
+
+span.shortened-text
+{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+nav.repository-nav
+{
+    background-color: #eee;
+    border-bottom: solid 1px #ccc;
+    margin-bottom: 25px;
+}
+
+nav.repository-nav ul
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+    left: -20px;
+}
+
+nav.repository-nav ul:after
+{
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+nav.repository-nav li
+{
+    margin: 0;
+    padding: 0;
+    float: left;
+}
+
+nav.repository-nav li a
+{
+    position: relative;
+    display: block;
+    padding: 10px 20px;
+    top: 1px;
+}
+
+nav.repository-nav li.active a
+{
+    background-image: url(images/tabarrow.png);
+    background-position: bottom center;
+    background-repeat: no-repeat;
+}
+
+nav.repository-nav li:hover
+{
+    background-color: #ddd;
+}
+
+nav.repository-nav a:hover
+{
+    text-decoration: none;
+}
+
+nav.repository-breadcrumb
+{
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+nav.repository-breadcrumb
+{
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+footer
+{
+    margin-top: 75px;
+    background-color: #eee;
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    margin-bottom: 32px;
+}
+
+footer .content
+{
+    position: relative;
+    background-image: url(logos/gitten-128.png);
+    background-repeat: no-repeat;
+    background-position: 0px 10px;
+    height: 64px;
+    padding: 10px 0;
+}
+
+footer .content:before
+{
+    content: "";
+    position: absolute;
+    background-image: url(logos/gitten-128.png);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    width: 512px;
+    height: 64px;
+    left: 0;
+    top: 74px;
+    opacity: 0.25;
+}
+
+footer p
+{
+    margin: 0 0 0.25em 150px;
+    color: #666;
+    font-style: italic;
+    font-family: Times New Roman, serif;
+    font-size: 14px;
+}
