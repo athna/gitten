@@ -1,9 +1,9 @@
 <script src="scripts/gitten/RevChooser.js"></script>
-<? $revType = $this->repo->getRevisionType() ?>
-<div data-component="gitten.RevChooser" data-repo-path="<?=$this->file->getUrl()?>">
+<? $revType = $repo->getRevisionType() ?>
+<div data-component="gitten.RevChooser" data-repo-path="<?=$file->getUrl()?>">
   <button class="dropdown <?=$revType?>">
     <span class="rev-type"><?=$revType?></span>:
-    <span class="rev-name"><?=$this->repo->getShortRevision()?></span>
+    <span class="rev-name"><?=$repo->getShortRevision()?></span>
   </button>
   <div class="popup">
     <input type="text" class="filter" placeholder="Filter branches" />

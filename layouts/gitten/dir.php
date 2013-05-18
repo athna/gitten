@@ -3,17 +3,17 @@
 
 <div class="content">
   <table class="directory">
-    <? foreach ($this->getFile()->getChildren() as $file): ?>
-      <tr class="<?=$file->getType()?>">
+    <? foreach ($file->getChildren() as $child): ?>
+      <tr class="<?=$child->getType()?>">
 
-        <td class="name"><a href="<?=$file->getUrl()?>"><?=$file->getName()?></a></td>
+        <td class="name"><a href="<?=$child->getUrl()?>"><?=$child->getName()?></a></td>
 
         <? if ($cfg->hasFileSizeTreeColumn()): ?>
           <td class="size">
-            <? if (!$file->isDirectory()): ?>
-              <? $fileSize = $file->getSize(); ?>
-              <span class="filesize"<? if ($fileSize->getSize() >= 1024): ?> title="<?=$fileSize->getLongText()?>"<? endif ?>>
-                <?=$fileSize->getShortText()?>
+            <? if (!$child->isDirectory()): ?>
+              <? $childSize = $child->getSize(); ?>
+              <span class="filesize"<? if ($childSize->getSize() >= 1024): ?> title="<?=$childSize->getLongText()?>"<? endif ?>>
+                <?=$childSize->getShortText()?>
               </span>
             <? endif ?>
           </td>
@@ -21,7 +21,7 @@
 
         <? if ($cfg->hasFileSizeTreeColumn()): ?>
           <td class="lastModified">
-            <?=$file->getLastModified()->getHTML()?>
+            <?=$child->getLastModified()->getHTML()?>
           </td>
         <? endif ?>
 
@@ -29,7 +29,7 @@
           <td class="description">
             <div class="shortened-text-container">
               <span class="shortened-text">
-                <?=htmlspecialchars($file->getDescription())?>
+                <?=htmlspecialchars($child->getDescription())?>
               </span>
             </div>
           </td>

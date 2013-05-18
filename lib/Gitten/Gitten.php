@@ -32,68 +32,79 @@ final class Gitten
             }
         }
 
-        // Determine the command
+        // Determine the view
         $i += 1;
         if ($i < $max)
         {
-            $cmd = $parts[$i];
+            $view = $parts[$i];
         }
         else if ($file->isRepository())
         {
-            $cmd = "tree";
+            $view = "tree";
         }
         else if ($file->isDirectory())
         {
-            $cmd = "dir";
+            $view = "dir";
         }
         else
         {
-            $cmd = "file";
+            $view = "file";
         }
 
         // Determine the arguments
         $i += 1;
         $args = array_slice($parts, $i);
 
-        $this->executeCommand($cmd, $file, $args, $_REQUEST);
-    }
-
-    /**
-     * Executes a command.
-     *
-     * @param string $cmd
-     *            The command to execute.
-     * @param string $file
-     *            The file on which to execute the command.
-     * @param string[] $args
-     *            The command arguments.
-     * @param string[string] $params
-     *            The command parameters.
-     */
-    private function executeCommand($cmd, $file, $args, $params)
-    {
-        $className = $this->getCommandClassName($cmd);
-        $command = new $className();
-        $command->execute($file, $args, $params);
-    }
-
-    /**
-     * Converts the specified command name into a command class name.
-     *
-     * @param string $cmd
-     *            The command name.
-     * @return string
-     *            The class name.
-     */
-    private function getCommandClassName($cmd)
-    {
-        $name = "";
-        $parts = explode("_", $cmd);
-        foreach ($parts as $part)
+        // Process arguments if file is a repository
+        if ($file->isRepository())
         {
-            $name .= ucfirst($part);
+            if (count($args))
+                $revision = array_shift($args);
+            else
+                $revision = null;
+            $repo = new Repo($file, $revision);
+            $path = trim(implode("/", $args), "/");
+            if ($path == "")
+                $repoFile = new RepoFile($repo);
+            else
+                $repoFile = new RepoFile($repo, $path);
         }
-        return "Gitten\\" . $name . "Command";
+        else
+        {
+            $repo = null;
+            $repoFile = null;
+        }
+
+        // Get request parameters
+        $params = $_REQUEST;
+
+        // Display the view (in an anonymous function to get a clean local
+        // variable scope and to prevent access to the current object)
+        $this->view($view, $file, $repo, $repoFile, $args, $params);
+    }
+
+    /**
+     * Forwards to a view.
+     *
+     * @param string $view
+     *            The view name.
+     * @param File $file
+     *            The physical file/directory.
+     * @param Repo $repo
+     *            The repository. Null if none.
+     * @param RepFile $repoFile
+     *            The repository file. Null if not a repository.
+     * @param string[] args
+     *            The request arguments.
+     * @param string[string] params
+     *            The request parameters.
+     */
+    private function view($view, File $file, $repo, $repoFile,
+        $args, $params)
+    {
+        global $cfg;
+
+        require($view . ".php");
     }
 
     /**

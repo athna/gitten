@@ -5,16 +5,16 @@
 
 <div class="content">
   <table class="directory">
-    <? foreach ($this->getRepoFile()->getChildren() as $file): ?>
-      <tr class="<?=$file->getType()?>">
-        <td class="name"><a href="<?=$file->getUrl()?>"><?=htmlspecialchars($file->getName())?></a></td>
+    <? foreach ($repoFile->getChildren() as $child): ?>
+      <tr class="<?=$child->getType()?>">
+        <td class="name"><a href="<?=$child->getUrl()?>"><?=htmlspecialchars($child->getName())?></a></td>
 
         <? if ($cfg->hasFileSizeTreeColumn()): ?>
           <td class="size">
-            <? if (!$file->isDirectory()): ?>
-              <? $fileSize = $file->getSize(); ?>
-              <span class="filesize"<? if ($fileSize->getSize() >= 1024): ?> title="<?=$fileSize->getLongText()?>"<? endif ?>>
-                <?=$fileSize->getShortText()?>
+            <? if (!$child->isDirectory()): ?>
+              <? $childSize = $child->getSize(); ?>
+              <span class="filesize"<? if ($childSize->getSize() >= 1024): ?> title="<?=$childSize->getLongText()?>"<? endif ?>>
+                <?=$childSize->getShortText()?>
               </span>
             <? endif?>
           </td>
@@ -22,19 +22,19 @@
 
         <? if ($cfg->hasLastModifiedTreeColumn()): ?>
           <td class="lastModified">
-            <?=$file->getLastCommit()->getCommitterDate()->getHTML()?>
+            <?=$child->getLastCommit()->getCommitterDate()->getHTML()?>
           </td>
         <? endif ?>
 
         <? if ($cfg->hasAuthorAvatarTreeColumn()): ?>
           <td class="authorAvatar">
-            <?=$file->getLastCommit()->getAuthor()->getAvatarHTML()?>
+            <?=$child->getLastCommit()->getAuthor()->getAvatarHTML()?>
           </td>
         <? endif ?>
 
         <? if ($cfg->hasAuthorTreeColumn()): ?>
           <td class="author">
-            <?=$file->getLastCommit()->getAuthor()->getHTML()?>
+            <?=$child->getLastCommit()->getAuthor()->getHTML()?>
           </td>
         <? endif ?>
 
@@ -42,7 +42,7 @@
           <td class="message">
             <div class="shortened-text-container">
               <span class="shortened-text">
-                <?=htmlspecialchars($file->getLastCommit()->getSubject())?>
+                <?=htmlspecialchars($child->getLastCommit()->getSubject())?>
               </span>
             </div>
           </td>

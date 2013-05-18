@@ -10,9 +10,9 @@
         <? endforeach ?>
       </ul>
     <? endif ?>
-    <input class="repo-uri" type="text" readonly value="<?=$this->getRepo()->getUrl($repoProtocols[0])?>"
+    <input class="repo-uri" type="text" readonly value="<?=$repo->getUrl($repoProtocols[0])?>"
            <? foreach ($repoProtocols as $protocol): ?>
-             data-<?=$protocol?>-uri="<?=$this->getRepo()->getUrl($protocol)?>"
+             data-<?=$protocol?>-uri="<?=$repo->getUrl($protocol)?>"
            <? endforeach ?>
     />
   </div>

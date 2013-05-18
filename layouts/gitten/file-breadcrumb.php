@@ -1,4 +1,3 @@
-<? $file = $this->getFile() ?>
 <nav class="file-breadcrumb <?=$file->getType()?>">
   <div class="content">
     <h1>
