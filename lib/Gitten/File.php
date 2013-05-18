@@ -172,7 +172,7 @@ abstract class File
                 $mimeType = "text/directory";
             }
             else
-           {
+            {
                 $content = $this->getContent();
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
                 $mimeType = finfo_buffer($finfo, $content);
