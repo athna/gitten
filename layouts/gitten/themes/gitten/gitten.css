@@ -54,6 +54,101 @@ table
     border-spacing: 0;
 }
 
+pre
+{
+    font-family: "Liberation Mono", Courier, monospace;
+    white-space: pre-wrap;
+}
+
+.markdown
+{
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.3em;
+}
+
+.markdown h1
+{
+    font-size: 24px;
+    font-weight: normal;
+    margin: 2em 0 1em 0;
+}
+
+.markdown h2
+{
+    font-size: 20px;
+    font-weight: normal;
+    margin: 2em 0 1em 0;
+}
+
+.markdown h3
+{
+    font-size: 18px;
+    font-weight: normal;
+    margin: 2em 0 1em 0;
+}
+
+.markdown h4
+{
+    font-size: 16px;
+    font-weight: bold;
+    margin: 2em 0 1em 0;
+}
+
+.markdown h5
+{
+    font-size: 15px;
+    font-weight: bold;
+    margin: 2em 0 1em 0;
+}
+
+.markdown h6
+{
+    font-size: 14px;
+    font-weight: bold;
+    margin: 2em 0 1em 0;
+}
+
+.markdown code
+{
+    border: solid 1px #ccc;
+    background: #eee;
+    border-radius: 2px;
+    padding: 1px 2px;    
+    font-family: "Liberation Mono", Courier, monospace;
+    font-size: 13px;
+}
+
+.markdown pre
+{
+    border: solid 1px #ccc;
+    background: #eee;
+    border-radius: 2px;
+    padding: 4px 8px;    
+    font-family: "Liberation Mono", Courier, monospace;
+    font-size: 13px;
+}
+
+.markdown pre code
+{
+    border: none;
+    background: none;
+    border-radius: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.markdown li p
+{
+    margin-bottom: 0.25em;
+}
+
+.markdown :first-child
+{
+    margin-top: 0;
+}
+
 input[type=text]
 {
     position: relative;
@@ -352,10 +447,9 @@ nav.repository-breadcrumb
     font-size: 16px;
 }
 
-.readme pre
+.readme
 {
-    width: 100%;
-    white-space: pre-wrap;
+    margin-top: 25px;
 }
 
 footer

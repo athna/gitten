@@ -54,7 +54,7 @@
 
   <? $readme = $repoFile->getReadmeHTML() ?>
   <? if ($readme): ?>
-    <div class="textfile">
+    <div class="readme">
       <?=$readme?>
     </div>
   <? endif ?>
