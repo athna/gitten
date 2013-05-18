@@ -232,13 +232,17 @@ final class RepoFile
             $name = strtolower($child->getName());
             if ($name == "readme.md")
             {
-                return "<div class=\"markdown\">"
-                    . \Michelf\Markdown::defaultTransform($child->read())
-                    . "</div>";
+                return \Michelf\Markdown::defaultTransform($child->read());
             }
             else if ($name == "readme" || $name == "readme.txt")
             {
-                return "<pre class=\"txt\">" . htmlspecialchars($child->read()) . "</pre>";
+                return "<p>" . nl2br(htmlspecialchars($child->read())) . "</p>";
+            }
+            else if ($name == "readme.html" || $name == "readme.htm")
+            {
+            	return strip_tags($child->read(), "<h1><h2><h3><h4><h5>"
+                    . "<h6><p><code><pre><strong><em><i><b><br><ul><ol>"
+            		. "<li><a><img>");
             }
         }
         return null;
