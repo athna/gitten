@@ -30,7 +30,7 @@ Not yet implemented stuff:
 
 ## Dependencies
 
-You only need [PHP](http://www.php.net/) 5.2 or higher and the Git command
+You only need [PHP](http://www.php.net/) 5.3 or higher and the Git command
 line tools.
 
 
