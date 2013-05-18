@@ -1,7 +1,7 @@
-<? include "header.php" ?>
-<? include "file-breadcrumb.php" ?>
-<? define("REPO_NAV", "source"); include "repo-nav.php" ?>
-<? include "repo-breadcrumb.php" ?>
+<? include "parts/header.php" ?>
+<? include "parts/file-breadcrumb.php" ?>
+<? include "parts/repo-nav.php" ?>
+<? include "parts/repo-breadcrumb.php" ?>
 
 <div class="content">
   <table class="directory">
@@ -53,4 +53,4 @@
   </table>
 </div>
 
-<? include "footer.php" ?>
+<? include "parts/footer.php" ?>

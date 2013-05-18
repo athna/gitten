@@ -1,10 +1,10 @@
-<? include "header.php" ?>
-<? include "file-breadcrumb.php" ?>
-<? define("REPO_NAV", "commits"); include "repo-nav.php" ?>
-<? include "repo-breadcrumb.php" ?>
+<? include "parts/header.php" ?>
+<? include "parts/file-breadcrumb.php" ?>
+<? include "parts/repo-nav.php" ?>
+<? include "parts/repo-breadcrumb.php" ?>
 
 <div class="content">
-  Hui!
+  TODO
 </div>
 
-<? include "footer.php" ?>
+<? include "parts/footer.php" ?>

@@ -1,5 +1,5 @@
-<? require "header.php" ?>
-<? require "file-breadcrumb.php" ?>
+<? require "parts/header.php" ?>
+<? require "parts/file-breadcrumb.php" ?>
 
 <div class="content">
   <table class="directory">
@@ -40,4 +40,4 @@
   </table>
 </div>
 
-<? include "footer.php" ?>
+<? include "parts/footer.php" ?>
