@@ -11,6 +11,9 @@ final class File
     /** The path to the file relative to the repository base directory. */
     private $path;
 
+    /** The cached description. Access it with getDescription() .*/
+    private $description = null;
+
     /**
      * Constructs a new file.
      *
@@ -215,5 +218,30 @@ final class File
         if ($this->isRepository()) return "repository";
         if ($this->isDirectory()) return "directory";
         return "file";
+    }
+
+    /**
+     * Returns the description. Only repositories can have a description.
+     * So for normal directories and files this method always returns an empty
+     * string.
+     *
+     * @return string
+     *            The description.
+     */
+    public function getDescription()
+    {
+        if (is_null($this->description))
+        {
+            if (!$this->isRepository())
+            {
+                $this->description = "";
+            }
+            else
+            {
+                $repo = new Repo($this);
+                $this->description = $repo->getDescription();
+            }
+        }
+        return $this->description;
     }
 }

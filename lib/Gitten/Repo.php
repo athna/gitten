@@ -32,6 +32,9 @@ final class Repo
     /** The cached current branch. Access it with getCurrentBranch() */
     private $currentBranch;
 
+    /** The cached description. Access it with getDescription() .*/
+    private $description = null;
+
     /**
      * Constructs a new repository.
      *
@@ -40,7 +43,7 @@ final class Repo
      * @param string $revision
      *            The selected revision.
      */
-    public function __construct($directory, $revision)
+    public function __construct(File $directory, $revision = null)
     {
         $this->directory = $directory;
         if (!$revision)
@@ -158,6 +161,22 @@ final class Repo
         $subDir = $dir . "/.git";
         if (is_dir($subDir)) return $subDir;
         return $dir;
+    }
+
+    /**
+     * Returns the repository description.
+     *
+     * @return string
+     *            The repository description.
+     */
+    public function getDescription()
+    {
+        if (is_null($this->description))
+        {
+            $this->description = file_get_contents($this->getGitDirectory()
+                . "/description");
+        }
+        return $this->description;
     }
 
     /**

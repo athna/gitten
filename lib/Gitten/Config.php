@@ -30,7 +30,8 @@ final class Config
             "lastModified" => false,
             "author" => false,
             "authorAvatar" => false,
-            "message" => false
+            "message" => false,
+            "description" => true
         )
     );
 
@@ -218,10 +219,24 @@ final class Config
      * Check if commit message should be displayed in tree.
      *
      * @return boolean
-     *            True if commit message should be displayed in tree, false if not.
+     *            True if commit message should be displayed in tree, false if
+     *            not.
      */
     public function hasMessageTreeColumn()
     {
         return $this->values["treeColumns"]["message"];
+    }
+
+    /**
+     * Check if repository description should be displayed in directory
+     * listings.
+     *
+     * @return boolean
+     *            True if repository description should be displayed, false if
+     *            not.
+     */
+    public function hasDescriptionTreeColumn()
+    {
+        return $this->values["treeColumns"]["description"];
     }
 }

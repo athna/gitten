@@ -209,7 +209,7 @@ table.directory td
 {
     border-top: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
-    padding: 8px 8px;
+    padding: 8px 16px;
 }
 
 table.directory td.name
@@ -259,7 +259,8 @@ table.directory td.author
     padding-left: 5px;
 }
 
-table.directory td.message
+table.directory td.message,
+table.directory td.description
 {
     width: 100%;
 }
