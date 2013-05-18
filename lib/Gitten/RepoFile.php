@@ -14,14 +14,14 @@ final class RepoFile extends File
     /** The path to the file relative to the repository root. */
     private $path;
 
-    /** The file type (file or directory). */
-    private $type;
+    /** Cached file type (file or directory). Access with getType(). */
+    private $type = null;
 
-    /** The file size (0 if if directory). */
-    private $size;
+    /** Cached file size (0 if directory). Access with getSize(). */
+    private $size = null;
 
-    /** The file mode. */
-    private $mode;
+    /** Cached file mode. Access with getMode(). */
+    private $mode = null;
 
     /** Cached last commit. */
     private $lastCommit;
@@ -42,14 +42,14 @@ final class RepoFile extends File
      *            root. If not specified then the file points at the repository
      *            root.
      */
-    public function __construct(Repo $repo, $path = ".", $type = "directory",
-        $size = 0, $mode = 040000)
+    public function __construct(Repo $repo, $path = ".", $type = null,
+        $size = null, $mode = null)
     {
         $this->repo = $repo;
         $this->path = $path ? $path : ".";
-        $this->type = $type;
-        $this->size = $size;
-        $this->mode = $mode;
+        $this->type = $path == "." ? "directory" : $type;
+        $this->size = $this->type == "directory" ? 0 : $size;
+        $this->mode = $this->type == "directory" ? 0755 : $mode;
     }
 
     /**
@@ -96,7 +96,7 @@ final class RepoFile extends File
      */
     public function isDirectory()
     {
-        return $this->type == "directory";
+        return $this->getType() == "directory";
     }
 
     /**
@@ -107,7 +107,20 @@ final class RepoFile extends File
      */
     public function getSize()
     {
+        if (is_null($this->size)) $this->readFileInfo();
         return new FileSize($this->size);
+    }
+
+    /**
+     * Returns the file mode.
+     *
+     * @return number
+     *            The file mode.
+     */
+    public function getMode()
+    {
+        if (is_null($this->mode)) $this->readFileInfo();
+        return $this->mode;
     }
 
     /**
@@ -154,6 +167,17 @@ final class RepoFile extends File
     }
 
     /**
+     * Reads the file info from the Git repository.
+     */
+    private function readFileInfo()
+    {
+        $file = $this->repo->getFile($this->path);
+        $this->size = $file->getSize();
+        $this->mode = $file->getMode();
+        $this->type = $file->getType();
+    }
+
+    /**
      * Returns the children files of this directory. Empty if there are
      * no children or if the current file is not a directory. The children
      * are sorted alphabetically with the directories at the top.
@@ -180,7 +204,7 @@ final class RepoFile extends File
      */
     public function getChild($name)
     {
-        return $this->repo->getChild($this, $name);
+        return $this->repo->getFile($this, $this->path . "/" . $name);
     }
 
     /**
@@ -191,6 +215,7 @@ final class RepoFile extends File
      */
     public function getType()
     {
+        if (is_null($this->type)) $this->readFileInfo();
         return $this->type;
     }
 

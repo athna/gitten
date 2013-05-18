@@ -315,27 +315,25 @@ final class Repo
 
 
     /**
-     * Returns a specific child from the specified directory.
+     * Returns a specific file from the repository.
      *
-     * @param RepoFile $directory
-     *            The directory in which to search for the file.
-     * @param string $name
-     *            The name of the child to return.
+     * @param string $path
+     *            The path to the file.
      * @return RepoFile
-     *            The child or null if not found.
+     *            The file or null if not found.
      */
-    public function getChild(RepoFile $directory, $name)
+    public function getFile($path)
     {
-        $line = $this->gitString("ls-tree", "-l", $this->revisionHash,
-            $directory->getPath() . "/" . $name);
+        $path = rtrim($path, "/");
+        $line = $this->gitString("ls-tree", "-l", $this->revisionHash, $path);
         if (!$line) return null;
         $columns = preg_split('/\s+/', trim($line), 5);
         $mode = octdec($columns[0]);
         $type = $columns[1];
         $size = $columns[3];
         $size = $size == "-" ? 0 : intval($size);
-        $localFile = basename($columns[4]);
-        return new RepoFile($this, $directory->getPath() . "/" . $localFile,
+        $file = basename($columns[4]);
+        return new RepoFile($this, $file,
             $type == "blob" ? "file" : "directory", $size, $mode);
     }
 

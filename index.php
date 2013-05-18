@@ -11,6 +11,9 @@
 // Define the Gitten version
 define("GITTEN_VERSION", "1.0.0");
 
+// We are interested in all errors
+error_reporting(E_ALL);
+
 // Calculate base urls. BASEURL is for static resources, PHP_BASEURL is for
 // PHP page requests. When mod_rewrite was detected then PHP_BASEURL is the
 // same as the BASEURL. If no mod_rewrite was detected then PHP_BASEURL is
