@@ -12,7 +12,7 @@
     <? endif ?>
     <input class="repo-uri" type="text" readonly value="<?=$repo->getUrl($repoProtocols[0])?>"
            <? foreach ($repoProtocols as $protocol): ?>
-             data-<?=$protocol?>-uri="<?=$repo->getUrl($protocol)?>"
+             <?="data-$protocol-uri"?>="<?=$repo->getUrl($protocol)?>"
            <? endforeach ?>
     />
   </div>
