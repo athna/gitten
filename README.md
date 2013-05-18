@@ -20,7 +20,7 @@ you.
 
 Not yet implemented stuff:
 
-* File/Blob viewer
+* LocalFile/Blob viewer
 * Commit viewer
 * Commit history
 * Blame

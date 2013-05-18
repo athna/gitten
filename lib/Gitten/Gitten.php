@@ -20,13 +20,13 @@ final class Gitten
 
         // Find the file/repo on which to execute the command
         $repo = null;
-        $file = new File();
+        $localFile = new LocalFile();
         for ($i = 0, $max = count($parts); $i < $max; $i += 1)
         {
             $part = $parts[$i];
             if (!$part) break;
-            $file = $file->getChild($part);
-            if ($file->isRepository())
+            $localFile = $localFile->getChild($part);
+            if ($localFile->isRepository())
             {
                 break;
             }
@@ -38,11 +38,11 @@ final class Gitten
         {
             $view = $parts[$i];
         }
-        else if ($file->isRepository())
+        else if ($localFile->isRepository())
         {
             $view = "tree";
         }
-        else if ($file->isDirectory())
+        else if ($localFile->isDirectory())
         {
             $view = "dir";
         }
@@ -56,13 +56,13 @@ final class Gitten
         $args = array_slice($parts, $i);
 
         // Process arguments if file is a repository
-        if ($file->isRepository())
+        if ($localFile->isRepository())
         {
             if (count($args))
                 $revision = array_shift($args);
             else
                 $revision = null;
-            $repo = new Repo($file, $revision);
+            $repo = new Repo($localFile, $revision);
             $path = trim(implode("/", $args), "/");
             if ($path == "")
                 $repoFile = new RepoFile($repo);
@@ -80,7 +80,7 @@ final class Gitten
 
         // Display the view (in an anonymous function to get a clean local
         // variable scope and to prevent access to the current object)
-        $this->view($view, $file, $repo, $repoFile, $args, $params);
+        $this->view($view, $localFile, $repo, $repoFile, $args, $params);
     }
 
     /**
@@ -88,7 +88,7 @@ final class Gitten
      *
      * @param string $view
      *            The view name.
-     * @param File $file
+     * @param LocalFile $localFile
      *            The physical file/directory.
      * @param Repo $repo
      *            The repository. Null if none.
@@ -99,7 +99,7 @@ final class Gitten
      * @param string[string] params
      *            The request parameters.
      */
-    private function view($view, File $file, $repo, $repoFile,
+    private function view($view, LocalFile $localFile, $repo, $repoFile,
         $args, $params)
     {
         global $cfg;

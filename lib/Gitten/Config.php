@@ -51,8 +51,8 @@ final class Config
      */
     private function loadConfig()
     {
-        $file = $this->findConfig();
-        $values = parse_ini_file($file, true);
+        $localFile = $this->findConfig();
+        $values = parse_ini_file($localFile, true);
         $this->values = array_merge($this->values, $values);
     }
 
@@ -70,16 +70,16 @@ final class Config
         if ($GITTEN_CONFIG && is_file($GITTEN_CONFIG)) return $GITTEN_CONFIG;
 
         // Search for /etc/gitten.ini
-        $file = "/etc/gitten.ini";
-        if (is_file($file)) return $file;
+        $localFile = "/etc/gitten.ini";
+        if (is_file($localFile)) return $localFile;
 
         // Search the custom gitten config in the default location
-        $file = "config/gitten-local.ini";
-        if (is_file($file)) return $file;
+        $localFile = "config/gitten-local.ini";
+        if (is_file($localFile)) return $localFile;
 
         // Search in default location
-        $file = "config/gitten.ini";
-        if (is_file($file)) return $file;
+        $localFile = "config/gitten.ini";
+        if (is_file($localFile)) return $localFile;
 
         // No config found
         return null;

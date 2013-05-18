@@ -3,7 +3,7 @@
 
 <div class="content">
   <table class="directory">
-    <? foreach ($file->getChildren() as $child): ?>
+    <? foreach ($localFile->getChildren() as $child): ?>
       <tr class="<?=$child->getType()?>">
 
         <td class="name"><a href="<?=$child->getUrl()?>"><?=$child->getName()?></a></td>

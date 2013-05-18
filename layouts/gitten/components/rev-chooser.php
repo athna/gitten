@@ -1,6 +1,6 @@
 <script src="scripts/gitten/RevChooser.js"></script>
 <? $revType = $repo->getRevisionType() ?>
-<div data-component="gitten.RevChooser" data-repo-path="<?=$file->getUrl()?>">
+<div data-component="gitten.RevChooser" data-repo-path="<?=$localFile->getUrl()?>">
   <button class="dropdown <?=$revType?>">
     <span class="rev-type"><?=$revType?></span>:
     <span class="rev-name"><?=$repo->getShortRevision()?></span>

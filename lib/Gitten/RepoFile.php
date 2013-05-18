@@ -32,7 +32,7 @@ final class RepoFile
     /**
      * Constructs a new repository file.
      *
-     * @param File $repo
+     * @param LocalFile $repo
      *            The repository.
      * @param string $path
      *            The path to the repository file relative to the repository
@@ -122,7 +122,7 @@ final class RepoFile
      * Returns the parent directory. Null if there is no parent because this
      * is the root directory.
      *
-     * @return File
+     * @return LocalFile
      *            The parent directory or null if none.
      */
     public function getParent()
@@ -134,7 +134,7 @@ final class RepoFile
     /**
      * Returns all parent directories.
      *
-     * @return File[]
+     * @return LocalFile[]
      *             All parent directories.
      */
     public function getParents()

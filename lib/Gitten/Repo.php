@@ -38,12 +38,12 @@ final class Repo
     /**
      * Constructs a new repository.
      *
-     * @param File $directory
+     * @param LocalFile $directory
      *            The directory where the repository is located.
      * @param string $revision
      *            The selected revision.
      */
-    public function __construct(File $directory, $revision = null)
+    public function __construct(LocalFile $directory, $revision = null)
     {
         $this->directory = $directory;
         if (!$revision)
@@ -65,7 +65,7 @@ final class Repo
     /**
      * Returns the directory where the repository is located.
      *
-     * @return File
+     * @return LocalFile
      *            The repository directory.
      */
     public function getDirectory()
@@ -301,8 +301,8 @@ final class Repo
             $type = $columns[1];
             $size = $columns[3];
             $size = $size == "-" ? 0 : intval($size);
-            $file = basename($columns[4]);
-            $children[] = new RepoFile($repo, "$path$file",
+            $localFile = basename($columns[4]);
+            $children[] = new RepoFile($repo, "$path$localFile",
                 $type == "blob" ? "file" : "directory", $size, $mode);
         }, "ls-tree", "-l", $this->revisionHash, $directory->getPath() . "/");
         usort($children, function($a, $b) {
@@ -334,8 +334,8 @@ final class Repo
         $type = $columns[1];
         $size = $columns[3];
         $size = $size == "-" ? 0 : intval($size);
-        $file = basename($columns[4]);
-        return new RepoFile($this, $directory->getPath() . "/" . $file,
+        $localFile = basename($columns[4]);
+        return new RepoFile($this, $directory->getPath() . "/" . $localFile,
             $type == "blob" ? "file" : "directory", $size, $mode);
     }
 
@@ -516,17 +516,17 @@ final class Repo
     /**
      * Returns the last commit for the specified file.
      *
-     * @param RepoFile $file
+     * @param RepoFile $localFile
      *            The repository file.
      * @return Commit
      *            The last commit.
      */
-    public function getLastCommit(RepoFile $file)
+    public function getLastCommit(RepoFile $localFile)
     {
-        $cacheKey = "commit:" . $this->revisionHash . ":" . $file->getPath();
+        $cacheKey = "commit:" . $this->revisionHash . ":" . $localFile->getPath();
         $commit = $this->readCache($cacheKey);
         if ($commit) return $commit;
-        $commits = $this->getCommits($file->getPath(),  1);
+        $commits = $this->getCommits($localFile->getPath(),  1);
         $commit = $commits[0];
         $this->writeCache($cacheKey, $commit);
         return $commit;
@@ -535,18 +535,18 @@ final class Repo
     /**
      * Returns the raw content of a file.
      *
-     * @param RepoFile $file
+     * @param RepoFile $localFile
      *            The file to read.
      * @return string
      *            The raw file content.
      */
-    public function readFile(RepoFile $file)
+    public function readFile(RepoFile $localFile)
     {
         $result = "";
         $this->gitForEachLine(function($row) use (&$result)
         {
             $result .= $row;
-        }, "show", $this->revisionHash . ":" .$file->getPath());
+        }, "show", $this->revisionHash . ":" .$localFile->getPath());
         return $result;
     }
 

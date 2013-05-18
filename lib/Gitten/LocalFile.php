@@ -6,7 +6,7 @@
 
 namespace Gitten;
 
-final class File
+final class LocalFile
 {
     /** The path to the file relative to the repository base directory. */
     private $path;
@@ -138,19 +138,19 @@ final class File
      * Returns the parent directory. Null if there is no parent because this
      * is the root directory.
      *
-     * @return File
+     * @return LocalFile
      *            The parent directory or null if none.
      */
     public function getParent()
     {
         if ($this->isRoot()) return null;
-        return new File(dirname($this->path));
+        return new LocalFile(dirname($this->path));
     }
 
     /**
      * Returns all parent directories without the root directory.
      *
-     * @return File[]
+     * @return LocalFile[]
      *             All parent directories.
      */
     public function getParents()
@@ -171,7 +171,7 @@ final class File
      * no children or if the current file is not a directory. The children
      * are sorted alphabetically with the directories at the top.
      *
-     * @return File[] The children files. May be empty.
+     * @return LocalFile[] The children files. May be empty.
      */
     public function getChildren()
     {
@@ -181,7 +181,7 @@ final class File
         while ($filename = readdir($dir))
         {
             if ($filename == "." || $filename == "..") continue;
-            $children[] = new File($this->path . "/" . $filename);
+            $children[] = new LocalFile($this->path . "/" . $filename);
         }
         usort($children, function($a, $b) {
             if ($a->isDirectory() && !$b->isDirectory()) return -1;
@@ -196,15 +196,15 @@ final class File
      *
      * @param string $name
      *            The name of the child.
-     * @return File
+     * @return LocalFile
      *            The child file.
      */
     public function getChild($name)
     {
         if ($this->isRoot())
-            return new File($name);
+            return new LocalFile($name);
         else
-            return new File($this->path . "/" . $name);
+            return new LocalFile($this->path . "/" . $name);
     }
 
     /**
