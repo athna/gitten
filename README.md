@@ -11,6 +11,22 @@ Some features:
 * Supports multiple repositories
 
 
+## TODO
+
+Gitten is currently work-in-progress. Many features are still missing.
+Follow this project or simply check this TODO section from time to time to
+watch the progress. When the TODO section is gone then Gitten is ready for
+you.
+
+Not yet implemented stuff:
+
+* File/Blob viewer.
+* Commit viewer.
+* Commit history.
+* Blame
+* Asynchronous loading of expensive commit info in tree.
+
+
 ## Dependencies
 
 You only need [PHP](http://www.php.net/) 5.2 or higher and the Git command
