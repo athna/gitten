@@ -244,10 +244,10 @@ final class LocalFile extends File
         }
         return $this->description;
     }
-    
+
     /**
      * Returns the raw content of the file.
-     * 
+     *
      * @return string
      *             The raw file content.
      */

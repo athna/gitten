@@ -203,10 +203,10 @@ final class RepoFile extends File
             $this->lastCommit = $this->repo->getLastCommit($this);
         return $this->lastCommit;
     }
-    
+
     /**
      * Returns the last modified timestamp.
-     * 
+     *
      * @return DateTime
      *             The last modified timestamp.
      */

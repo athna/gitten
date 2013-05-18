@@ -108,7 +108,7 @@ abstract class File
 
     /**
      * Reads the raw content of this file and returns it.
-     * 
+     *
      * @return string
      *             The raw file content.
      */

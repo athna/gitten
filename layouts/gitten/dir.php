@@ -38,14 +38,14 @@
       </tr>
     <? endforeach ?>
   </table>
-  
+
   <? $readme = $localFile->getReadMeHTML() ?>
   <? if ($readme): ?>
     <div class="readme">
       <?=$readme?>
     </div>
   <? endif ?>
-  
+
 </div>
 
 <? include "parts/footer.php" ?>
