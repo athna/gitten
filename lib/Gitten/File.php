@@ -112,7 +112,7 @@ abstract class File
      * @return string
      *             The raw file content.
      */
-    abstract function read();
+    abstract function getContent();
 
     /**
      * Returns the HTML code of the README in this dirctory. Returns null
@@ -131,15 +131,16 @@ abstract class File
             $name = strtolower($child->getName());
             if ($name == "readme.md")
             {
-                return \Michelf\Markdown::defaultTransform($child->read());
+                return \Michelf\Markdown::defaultTransform($child->getContent());
             }
             else if ($name == "readme" || $name == "readme.txt")
             {
-                return "<p>" . nl2br(htmlspecialchars($child->read())) . "</p>";
+                return "<p>" . nl2br(htmlspecialchars($child->getContent()))
+                    . "</p>";
             }
             else if ($name == "readme.html" || $name == "readme.htm")
             {
-                return strip_tags($child->read(), "<h1><h2><h3><h4><h5>"
+                return strip_tags($child->getContent(), "<h1><h2><h3><h4><h5>"
                     . "<h6><p><code><pre><strong><em><i><b><br><ul><ol>"
                     . "<li><a><img>");
             }

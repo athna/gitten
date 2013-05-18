@@ -29,6 +29,9 @@ final class RepoFile extends File
     /** The cached children. Access with getChildren(). */
     private $children = null;
 
+    /** The cached content. Access with getContent(). */
+    private $content = null;
+
     /**
      * Constructs a new repository file.
      *
@@ -221,8 +224,12 @@ final class RepoFile extends File
      * @return string
      *            The raw content of this file.
      */
-    public function read()
+    public function getContent()
     {
-        return $this->repo->readFile($this);
+        if (is_null($this->content))
+        {
+            $this->content = $this->repo->readFile($this);
+        }
+        return $this->content;
     }
 }

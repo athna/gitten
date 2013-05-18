@@ -11,8 +11,11 @@ final class LocalFile extends File
     /** The path to the file relative to the repository base directory. */
     private $path;
 
-    /** The cached description. Access it with getDescription() .*/
+    /** The cached description. Access it with getDescription(). */
     private $description = null;
+
+    /** The cached content. Access it with getContent(). */
+    private $content = null;
 
     /**
      * Constructs a new file.
@@ -41,6 +44,12 @@ final class LocalFile extends File
         return $this->path;
     }
 
+    /**
+     * Returns the URL to this file.
+     *
+     * @return string
+     *             The URL.
+     */
     public function getUrl()
     {
         return PHP_BASEURL . "/" . $this->path;
@@ -251,8 +260,12 @@ final class LocalFile extends File
      * @return string
      *             The raw file content.
      */
-    public function read()
+    public function getContent()
     {
-        return file_get_contents($this->getAbsolutePath());
+        if (is_null($this->content))
+        {
+            $this->content = file_get_contents($this->getAbsolutePath());
+        }
+        return $this->content;
     }
 }
