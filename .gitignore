@@ -4,3 +4,5 @@
 /.buildpath
 /.htaccess
 /.project
+/.idea
+/*.iml
