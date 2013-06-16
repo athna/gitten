@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * A file or directory in a Git repository.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class RepoFile extends File
 {
     /** The repository. */
@@ -35,12 +40,19 @@ final class RepoFile extends File
     /**
      * Constructs a new repository file.
      *
-     * @param LocalFile $repo
+     * @param \Gitten\LocalFile|\Gitten\Repo $repo
      *            The repository.
      * @param string $path
      *            The path to the repository file relative to the repository
      *            root. If not specified then the file points at the repository
      *            root.
+     * @param string $type
+     *            The file type ("file" or "directory"). If no path was
+     *            specified then this defaults to "directory".
+     * @param number $size
+     *            Optional file size. Defaults to 0.
+     * @param number $mode
+     *            Optional file mode. Defaults to 0755.
      */
     public function __construct(Repo $repo, $path = ".", $type = null,
         $size = null, $mode = null)

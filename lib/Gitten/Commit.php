@@ -52,7 +52,7 @@ class Commit
      *            The author.
      * @param DateTime $committerDate
      *            The committer date.
-     * @param Contact $commiter
+     * @param Contact $committer
      *            The committer.
      * @param string $subject
      *            The subject.
@@ -151,7 +151,7 @@ class Commit
     /**
      * Returns the subject.
      *
-     * @retrun string
+     * @return string
      *            The subject.
      */
     public function getSubject()

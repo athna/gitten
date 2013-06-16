@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * A file or directory on the local file system.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class LocalFile extends File
 {
     /** The path to the file relative to the repository base directory. */
@@ -192,7 +197,7 @@ final class LocalFile extends File
             if ($filename == "." || $filename == "..") continue;
             $children[] = new LocalFile($this->path . "/" . $filename);
         }
-        usort($children, function($a, $b) {
+        usort($children, function(LocalFile $a, LocalFile $b) {
             if ($a->isDirectory() && !$b->isDirectory()) return -1;
             if (!$a->isDirectory() && $b->isDirectory()) return 1;
             return $a->getName() > $b->getName() ? 1 : -1;

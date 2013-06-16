@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * Container class for dates and times.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class DateTime
 {
     /** The time as UNIX timestamp in seconds. */

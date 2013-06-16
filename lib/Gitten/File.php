@@ -6,6 +6,13 @@
 
 namespace Gitten;
 
+use Michelf\Markdown;
+
+/**
+ * Abstract base class for files and directories.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 abstract class File
 {
     /** The cached mime type. Access it with getMimeType(). */
@@ -124,7 +131,7 @@ abstract class File
     abstract function getContent();
 
     /**
-     * Returns the HTML code of the README in this dirctory. Returns null
+     * Returns the HTML code of the README in this directory. Returns null
      * if this repository file is not a directory or if it does not contain
      * a README file.
      *
@@ -140,7 +147,7 @@ abstract class File
             $name = strtolower($child->getName());
             if ($name == "readme.md")
             {
-                return \Michelf\Markdown::defaultTransform($child->getContent());
+                return Markdown::defaultTransform($child->getContent());
             }
             else if ($name == "readme" || $name == "readme.txt")
             {

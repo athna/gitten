@@ -85,6 +85,12 @@ final class Config
         return null;
     }
 
+    /**
+     * Returns the singleton instance of the Gitten configuration.
+     *
+     * @return Config
+     *            The Gitten configuration.
+     */
     public static function getInstance()
     {
         if (!self::$instance) self::$instance = new Config();
@@ -92,7 +98,7 @@ final class Config
     }
 
     /**
-     * Returns the git executeable path.
+     * Returns the git executable path.
      *
      * @return string
      *            The git executable path.

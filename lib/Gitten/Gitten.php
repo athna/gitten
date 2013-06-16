@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * Gitten application.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class Gitten
 {
     /**
@@ -94,7 +99,7 @@ final class Gitten
      *            The physical file/directory.
      * @param Repo $repo
      *            The repository. Null if none.
-     * @param RepFile $repoFile
+     * @param RepoFile $repoFile
      *            The repository file. Null if not a repository.
      * @param string[] args
      *            The request arguments.

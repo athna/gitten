@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * A Git repository.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class Repo
 {
     /** The directory where the repository is located. */
@@ -15,25 +20,52 @@ final class Repo
     private $revision;
 
     /**
-     * The cached type of the selected revision. Access it with
+     * @var string The cached type of the selected revision. Access it with
      * getRevisionType()
      */
     private $revisionType;
 
-    /** The revision resolved into a hash. */
+    /** @var string The revision resolved into a hash. */
     private $revisionHash;
 
-    /** The cached available branches. Access it with getBranches() */
+    /**
+     * @var string[] The cached available branches. Access it with
+     * getBranches()
+     */
     private $branches;
 
-    /** The cached available tags. Access it with getTags() */
+    /** @var string[] The cached available tags. Access it with getTags() */
     private $tags;
 
-    /** The cached current branch. Access it with getCurrentBranch() */
+    /**
+     * @var string The cached current branch. Access it with
+     * getCurrentBranch()
+     */
     private $currentBranch;
 
-    /** The cached description. Access it with getDescription() .*/
-    private $description = null;
+    /** @var string The cached description. Access it with getDescription(). */
+    private $description;
+
+    /** @var string The executed Git command. */
+    private $gitCmd;
+
+    /** @var string The file name for recording Git error messages. */
+    private $gitErrorFile;
+
+    /** @var number The start time for benchmarking Git commands. */
+    private $gitStartTime;
+
+    /** @var resource The current Git process. */
+    private $gitProc;
+
+    /** @var array The Git process pipes. */
+    private $gitPipes;
+
+    /**
+     * @var array The benchmark statistics of all executed Git commands in
+     * this request.
+     */
+    private $gitBenchmark;
 
     /**
      * Constructs a new repository.
@@ -76,7 +108,8 @@ final class Repo
     /**
      * Returns the selected revision.
      *
-     * @return The selected revision.
+     * @return string
+     *             The selected revision.
      */
     public function getRevision()
     {
@@ -102,7 +135,7 @@ final class Repo
     /**
      * Returns the revision type.
      *
-     * @return {string}
+     * @return string
      *            The revision type (branch, tag, tree).
      */
     public function getRevisionType()
@@ -137,7 +170,8 @@ final class Repo
      *
      * @param RepoFile $repoFile
      *            The repository file.
-     * @return The repository file tree URL.
+     * @return string
+     *             The repository file tree URL.
      */
     public function getFileUrl(RepoFile $repoFile)
     {
@@ -184,6 +218,8 @@ final class Repo
      *
      * @param mixed $args___
      *            Variable number of arguments to pass to git.
+     * @throws GitException
+     *            When command could not be executed.
      */
     private function openGit($args___)
     {
@@ -233,6 +269,8 @@ final class Repo
      *            The row delimiter.
      * @param mixed $args___
      *            Variable number of git arguments.
+     * @return string[]
+     *            The result rows.
      */
     private function gitRows($rowDelimiter, $args___)
     {
@@ -250,6 +288,8 @@ final class Repo
      *
      * @param mixed $args___
      *            Variable number of git arguments.
+     * @return string
+     *            The result string.
      */
     private function gitString($args___)
     {
@@ -305,7 +345,7 @@ final class Repo
             $children[] = new RepoFile($repo, "$path$localFile",
                 $type == "blob" ? "file" : "directory", $size, $mode);
         }, "ls-tree", "-l", $this->revisionHash, $directory->getPath() . "/");
-        usort($children, function($a, $b) {
+        usort($children, function(RepoFile $a, RepoFile $b) {
             if ($a->isDirectory() && !$b->isDirectory()) return -1;
             if (!$a->isDirectory() && $b->isDirectory()) return 1;
             return $a->getName() > $b->getName() ? 1 : -1;
@@ -441,7 +481,6 @@ final class Repo
             $parentHash = $cols[2];
             $authorDate = new DateTime($cols[3]);
             $author = new Contact($cols[4], $cols[5]);
-            $authorEMail = $cols[5];
             $committerDate = new DateTime($cols[6]);
             $committer = new Contact($cols[7], $cols[8]);
             $subject = $cols[9];
@@ -549,11 +588,11 @@ final class Repo
     }
 
     /**
-     * Returns the repository URL for the specified procotocl.
+     * Returns the repository URL for the specified protocol.
      *
-     * @param {string} $protocol
+     * @param string $protocol
      *            The protocol
-     * @return {string}
+     * @return string
      *            The repository URL.
      */
     public function getUrl($protocol)

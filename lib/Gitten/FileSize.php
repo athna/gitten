@@ -6,6 +6,11 @@
 
 namespace Gitten;
 
+/**
+ * Container class for file sizes.
+ *
+ * @author Klaus Reimer <k@ailis.de>
+ */
 final class FileSize
 {
     /** The file size in bytes. */
