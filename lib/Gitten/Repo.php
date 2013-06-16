@@ -207,8 +207,11 @@ final class Repo
     {
         if (is_null($this->description))
         {
-            $this->description = file_get_contents($this->getGitDirectory()
-                . "/description");
+            $file = $this->getGitDirectory() . "/description";
+            if (file_exists($file))
+                $this->description = file_get_contents($file);
+            else
+              $this->description = "";
         }
         return $this->description;
     }
