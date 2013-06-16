@@ -162,7 +162,29 @@ input[type=text]
     vertical-align: baseline;
 }
 
-button
+.buttons
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.buttons li
+{
+    float: left;
+}
+
+.buttons:after
+{
+    content: "";
+    display: block;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+    clear: both;
+}
+
+button, .buttons a
 {
     position: relative;
     font-family: Arial, sans-serif;
@@ -174,7 +196,7 @@ button
     vertical-align: baseline;
     display: inline-block;
     border: solid 1px #ccc;
-    border-radius: 2px;
+    border-radius: 5px;
     padding: 5px 10px;
     color: #222;
     background: #eee;
@@ -185,14 +207,31 @@ button
     height: 16px;
 }
 
-button:hover
+.buttons a
+{
+    border-radius: 0;
+    border-left-style: none;
+}
+
+.buttons > li:first-child a
+{
+    border-radius: 5px 0 0 5px;
+    border-left-style: solid;
+}
+
+.buttons > li:last-child a
+{
+    border-radius: 0 5px 5px 0;
+}
+
+button:hover, .buttons a:hover
 {
     background: #ddd;
     background: -webkit-linear-gradient(top, #eee 0%, #ddd 100%);
     background: linear-gradient(to bottom, #eee 0%, #ddd 100%);
 }
 
-button:active, button.dropdown.open
+button:active, button.dropdown.open, .buttons a:active
 {
     border-color: #aaa;
     background: #eee;

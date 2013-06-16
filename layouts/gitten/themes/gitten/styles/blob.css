@@ -1,0 +1,154 @@
+/*
+ * Gitten - http://github.com/kayahr/gitten
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * 
+ * Styles for the blob view page.
+ */
+
+@import "common/gitten.css";
+@import "components/rev-chooser.css";
+
+
+.blob .header
+{
+    border: solid 1px #ccc;
+    background: #eee;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+}
+
+.blob .body
+{
+    border: solid 1px #ccc;
+    border-radius: 0 0 5px 5px;
+    border-top: none;
+}
+
+.blob .actions
+{
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.blob .info
+{
+    padding: 15px 8px;
+}
+
+.blob .info dt
+{
+    display: none;
+}
+
+.blob .info dd
+{
+    display: inline;
+}
+
+.blob .info dd:after
+{
+    content: "";
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #fff;
+    margin-left: 10px;
+    margin-right: 5px; 
+}
+
+.blob .info dd:last-child:after
+{
+    display: none;
+}
+
+.blob .info .fileMode
+{
+    font-family: "Liberation Mono", Courier, monospace;
+}
+
+
+.blob .body
+{
+    position: relative;
+}
+
+/* =======================================================================
+   Image body styles
+   ======================================================================= */
+
+.blob .image-body
+{
+    background: url("../images/checkerboard.png");
+    display: inline-block;
+    margin: 8px;
+    border: solid 1px #ccc;
+}
+ 
+.blob .image-body img
+{
+    display: block;
+}
+
+tr.hide,
+tr.hide td,
+tr.hide td *
+{
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    line-height: 0 !important;
+    overflow: hidden !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin: 0;
+    border: none;
+}
+
+/* =======================================================================
+ * Text file rendering
+ * ======================================================================= */
+
+td.text-file
+{
+    width: 100%;
+}
+
+pre.text-file
+{
+    line-height: 20px;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+}
+
+table.blob
+{
+    width: 100%;
+}
+
+td.text-file
+{
+    overflow: auto;
+    position: relative;
+}
+
+td.text-file div
+{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    line-height: 20px;
+    font-family: "courier new", monospace;
+    white-space: pre;
+}
+
+td.line-numbers
+{
+    background: #eee;
+    border-right: solid 1px #ddd;
+    text-align: right;
+    color: #888;
+    line-height: 20px;
+    font-family: "courier new", monospace;
+    padding: 5px 5px 20px 5px;
+}

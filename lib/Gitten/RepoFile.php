@@ -22,10 +22,16 @@ final class RepoFile extends File
     /** Cached file type (file or directory). Access with getType(). */
     private $type = null;
 
-    /** Cached file size (0 if directory). Access with getSize(). */
+    /**
+     * Cached file size (0 if directory). Access with getSize().
+     * @var FileSize
+     */
     private $size = null;
 
-    /** Cached file mode. Access with getMode(). */
+    /**
+     * Cached file mode. Access with getMode().
+     * @var FileMode
+     */
     private $mode = null;
 
     /** Cached last commit. */
@@ -36,6 +42,12 @@ final class RepoFile extends File
 
     /** The cached content. Access with getContent(). */
     private $content = null;
+
+    /**
+     * The cached line count. Access with getLineCount().
+     * @var int
+     */
+    private $lineCount = null;
 
     /**
      * Constructs a new repository file.
@@ -49,19 +61,21 @@ final class RepoFile extends File
      * @param string $type
      *            The file type ("file" or "directory"). If no path was
      *            specified then this defaults to "directory".
-     * @param number $size
-     *            Optional file size. Defaults to 0.
-     * @param number $mode
-     *            Optional file mode. Defaults to 0755.
+     * @param FileSize $size
+     *            Optional file size. Read from repository if not specified.
+     *            Ignored for directories.
+     * @param FileMode $mode
+     *            Optional file mode. Read from repository if not specified.
+     *            Ignored for directories.
      */
     public function __construct(Repo $repo, $path = ".", $type = null,
-        $size = null, $mode = null)
+        FileSize $size = null, FileMode $mode = null)
     {
         $this->repo = $repo;
         $this->path = $path ? $path : ".";
         $this->type = $path == "." ? "directory" : $type;
-        $this->size = $this->type == "directory" ? 0 : $size;
-        $this->mode = $this->type == "directory" ? 0755 : $mode;
+        $this->size = $this->type == "directory" ? new FileSize(0) : $size;
+        $this->mode = $this->type == "directory" ? new FileMode(0755) : $mode;
     }
 
     /**
@@ -87,6 +101,17 @@ final class RepoFile extends File
     public function getUrl()
     {
         return PHP_BASEURL . "/" . $this->repo->getFileUrl($this);
+    }
+
+    /**
+     * Returns the raw URL of this repository file.
+     *
+     * @return string
+     *             The raw URL.
+     */
+    public function getRawUrl()
+    {
+        return $this->repo->getRawUrl($this);
     }
 
     /**
@@ -120,13 +145,13 @@ final class RepoFile extends File
     public function getSize()
     {
         if (is_null($this->size)) $this->readFileInfo();
-        return new FileSize($this->size);
+        return $this->size;
     }
 
     /**
      * Returns the file mode.
      *
-     * @return number
+     * @return FileMode
      *            The file mode.
      */
     public function getMode()
@@ -265,8 +290,20 @@ final class RepoFile extends File
     {
         if (is_null($this->content))
         {
-            $this->content = $this->repo->readFile($this);
+            $this->content = $this->repo->readFile($this, $this->lineCount);
         }
         return $this->content;
+    }
+
+    /**
+     * Returns the number of lines.
+     *
+     * @return number
+     *            The number of lines.
+     */
+    public function getLineCount()
+    {
+        if (is_null($this->lineCount)) $this->readContent();
+        return $this->lineCount;
     }
 }

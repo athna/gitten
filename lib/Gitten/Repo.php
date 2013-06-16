@@ -184,6 +184,20 @@ final class Repo
     }
 
     /**
+     * Returns the raw URL for the specified repository file.
+     *
+     * @param RepoFile $repoFile
+     *            The repository file.
+     * @return string
+     *             The repository file raw URL.
+     */
+    public function getRawUrl(RepoFile $repoFile)
+    {
+        return $this->directory->getPath() . "/raw/"
+            . $this->revision . "/" . $repoFile->getPath();
+    }
+
+    /**
      * Returns the git directory.
      *
      * @return string
@@ -340,10 +354,9 @@ final class Repo
         $this->gitForEachLine(function($line) use ($path, &$children, $repo)
         {
             $columns = preg_split('/\s+/', trim($line), 5);
-            $mode = octdec($columns[0]);
+            $mode = new FileMode(octdec($columns[0]));
             $type = $columns[1];
-            $size = $columns[3];
-            $size = $size == "-" ? 0 : intval($size);
+            $size = new FileSize($columns[3] == "-" ? 0 : intval($columns[3]));
             $localFile = basename($columns[4]);
             $children[] = new RepoFile($repo, "$path$localFile",
                 $type == "blob" ? "file" : "directory", $size, $mode);
@@ -371,10 +384,9 @@ final class Repo
         $line = $this->gitString("ls-tree", "-l", $this->revisionHash, $path);
         if (!$line) return null;
         $columns = preg_split('/\s+/', trim($line), 5);
-        $mode = octdec($columns[0]);
+        $mode = new FileMode(octdec($columns[0]));
         $type = $columns[1];
-        $size = $columns[3];
-        $size = $size == "-" ? 0 : intval($size);
+        $size = new FileSize($columns[3] == "-" ? 0 : intval($columns[3]));
         $file = basename($columns[4]);
         return new RepoFile($this, $file,
             $type == "blob" ? "file" : "directory", $size, $mode);
@@ -586,16 +598,22 @@ final class Repo
      *
      * @param RepoFile $localFile
      *            The file to read.
+     * @param number $lineCount
+     *            Optional variable reference into which the number of read
+     *            lines is written.
      * @return string
      *            The raw file content.
      */
-    public function readFile(RepoFile $localFile)
+    public function readFile(RepoFile $localFile, &$lineCount = null)
     {
         $result = "";
-        $this->gitForEachLine(function($row) use (&$result)
+        $lines = 0;
+        $this->gitForEachLine(function($row) use (&$result, &$lines)
         {
+            $lines++;
             $result .= $row;
         }, "show", $this->revisionHash . ":" .$localFile->getPath());
+        if (func_num_args() == 2) $lineCount = $lines;
         return $result;
     }
 
