@@ -1,0 +1,79 @@
+/*
+ * Gitten - http://github.com/kayahr/gitten
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * 
+ * Styles for the commits listing page.
+ */
+
+@import "common/gitten.css";
+@import "components/rev-chooser.css";
+
+table.commits
+{
+    margin-top: 1em;
+    width: 100%;
+}
+
+table.commits th
+{
+    text-align: left;
+    font-weight: bold;
+    padding: 8px 16px;
+}
+
+table.commits tr:hover
+{
+    background: #eee;
+}
+
+table.commits td
+{
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    padding: 8px 16px;
+    vertical-align: middle;
+}
+
+table.commits td.authorAvatar
+{
+    padding-right: 0;
+    width: 16px;
+}
+
+table.commits td.authorAvatar .gravatar
+{
+    width: 16px;
+    height: 16px;
+}
+
+table.commits td.hash
+{
+    font-family: "Liberation Mono", Courier, monospace;
+}
+
+table.commits td.author
+{
+    white-space: nowrap;
+    padding-left: 5px;
+}
+
+table.commits td.message
+{
+    width: 100%;
+}
+
+table.commits td.date
+{
+    white-space: nowrap;
+}
+
+nav.commits
+{
+    margin-top: 2em;
+    text-align: center;
+}
+
+nav.commits a
+{
+    margin: 10px;
+}

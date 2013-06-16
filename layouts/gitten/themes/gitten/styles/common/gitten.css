@@ -1,6 +1,13 @@
-@import "fonts.css";
-@import "rev-chooser.css";
-@import "protocol-chooser.css";
+/*
+ * Gitten - http://github.com/kayahr/gitten
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * 
+ * Common styles for all pages.
+ */
+
+@import "reset.css";
+@import "../../fonts/fontawesome.css";
+@import "../components/protocol-chooser.css";
 
 html
 {
@@ -252,17 +259,17 @@ nav.file-breadcrumb .content
 
 nav.file-breadcrumb.directory .content
 {
-    background-image: url(icons/64/directory.png);    
+    background-image: url(../../icons/64/directory.png);    
 }
 
 nav.file-breadcrumb.repository .content
 {
-    background-image: url(icons/64/repository.png);    
+    background-image: url(../../icons/64/repository.png);    
 }
 
 nav.file-breadcrumb.file .content
 {
-    background-image: url(icons/64/file.png);    
+    background-image: url(../../icons/64/file.png);    
 }
 
 nav.file-breadcrumb h1
@@ -294,6 +301,7 @@ table.directory td
     border-top: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
     padding: 8px 16px;
+    vertical-align: middle;
 }
 
 table.directory td.name
@@ -306,17 +314,17 @@ table.directory td.name
 
 table.directory tr.directory td.name
 {
-    background-image: url(icons/16/directory.png);
+    background-image: url(../../icons/16/directory.png);
 }
 
 table.directory tr.file td.name
 {
-    background-image: url(icons/16/file.png);
+    background-image: url(../../icons/16/file.png);
 }
 
 table.directory tr.repository td.name
 {
-    background-image: url(icons/16/repository.png);
+    background-image: url(../../icons/16/repository.png);
 }
 
 table.directory td.lastModified,
@@ -347,6 +355,7 @@ table.directory td.message,
 table.directory td.description
 {
     width: 100%;
+    vertical-align: middle;
 }
 
 div.shortened-text-container
@@ -362,6 +371,7 @@ span.shortened-text
     left: 0;
     top: 0;
     width: 100%;
+    height: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -409,7 +419,7 @@ nav.repository-nav li a
 
 nav.repository-nav li.active a
 {
-    background-image: url(images/tabarrow.png);
+    background-image: url(../../images/tabarrow.png);
     background-position: bottom center;
     background-repeat: no-repeat;
 }
@@ -422,12 +432,6 @@ nav.repository-nav li:hover
 nav.repository-nav a:hover
 {
     text-decoration: none;
-}
-
-nav.repository-breadcrumb
-{
-    margin-bottom: 25px;
-    font-size: 16px;
 }
 
 nav.repository-breadcrumb
@@ -458,7 +462,7 @@ footer
 footer .content
 {
     position: relative;
-    background-image: url(logos/gitten-128.png);
+    background-image: url(../../logos/gitten-128.png);
     background-repeat: no-repeat;
     background-position: 0px 10px;
     height: 64px;
@@ -469,7 +473,7 @@ footer .content:before
 {
     content: "";
     position: absolute;
-    background-image: url(logos/gitten-128.png);
+    background-image: url(../../logos/gitten-128.png);
     background-repeat: no-repeat;
     background-position: bottom left;
     width: 512px;

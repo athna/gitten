@@ -1,3 +1,4 @@
+<? $pageId = "dir" ?>
 <? require "parts/header.php" ?>
 <? require "parts/file-breadcrumb.php" ?>
 

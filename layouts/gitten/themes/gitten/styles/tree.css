@@ -1,0 +1,9 @@
+/*
+ * Gitten - http://github.com/kayahr/gitten
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * 
+ * Styles for the repository tree listing page.
+ */
+
+@import "common/gitten.css";
+@import "components/rev-chooser.css";

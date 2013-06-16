@@ -1,0 +1,9 @@
+@font-face 
+{
+    font-family: 'Icons';
+    src: url('fontawesome.eot');
+    src: url('fontawesome.eot?#iefix') format('embedded-opentype'),
+         url('fontawesome.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

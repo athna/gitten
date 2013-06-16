@@ -13,33 +13,65 @@ namespace Gitten;
  */
 class Commit
 {
-    /** The commit hash. */
+    /**
+     * The repository this commit belongs to.
+     * @var Repo
+     */
+    private $repo;
+
+    /**
+     * The commit hash.
+     * @var Hash
+     */
     private $commitHash;
 
-    /** The tree hash. */
+    /**
+     * The tree hash.
+     * @var Hash
+     */
     private $treeHash;
 
-    /** The parent hash. */
+    /**
+     * The parent hash.
+     * @var Hash
+     */
     private $parentHash;
 
-    /** The author date (Unix timestamp). */
+    /**
+     * The author date.
+     * @var DateTime
+     */
     private $authorDate;
 
-    /** the author. */
+    /**
+     * The author.
+     * @var Contact
+     */
     private $author;
 
-    /** The committer date (Unix timestamp). */
+    /**
+     * The committer date.
+     * @var DateTime
+     */
     private $committerDate;
 
-    /** The committer. */
+    /**
+     * The committer.
+     * @var Contact
+     */
     private $committer;
 
-    /** The subject. */
+    /**
+     * The subject.
+     * @var string
+     */
     private $subject;
 
     /**
      * Constructs a new commit info.
      *
+     * @param Repo $repo
+     *            The repository this commit belongs to.
      * @param string $commitHash
      *            The commit hash.
      * @param string $treeHash
@@ -57,10 +89,11 @@ class Commit
      * @param string $subject
      *            The subject.
      */
-    public function __construct($commitHash, $treeHash,
-        $parentHash, DateTime $authorDate, Contact $author,
+    public function __construct(Repo $repo, Hash $commitHash, Hash $treeHash,
+        Hash $parentHash, DateTime $authorDate, Contact $author,
         DateTime $committerDate, Contact $committer, $subject)
     {
+        $this->repo = $repo;
         $this->commitHash = $commitHash;
         $this->treeHash = $treeHash;
         $this->parentHash = $parentHash;
@@ -74,7 +107,7 @@ class Commit
     /**
      * Returns the commit hash.
      *
-     * @return string
+     * @return Hash
      *            The commit hash.
      */
     public function getCommitHash()
@@ -85,7 +118,7 @@ class Commit
     /**
      * Returns the tree hash.
      *
-     * @return string
+     * @return Hash
      *            The tree hash.
      */
     public function getTreeHash()
@@ -96,7 +129,7 @@ class Commit
     /**
      * Returns the parent hash.
      *
-     * @return string
+     * @return Hash
      *            The parent hash.
      */
     public function getParentHash()
@@ -157,5 +190,28 @@ class Commit
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * Returns the commit URL.
+     *
+     * @return string
+     *             The commit URL
+     */
+    public function getUrl()
+    {
+        return $this->repo->getCommitUrl($this);
+    }
+
+    /**
+     * Returns the HTML code for this commit.
+     *
+     * @return string
+     *             The HTML code for this commit.
+     */
+    public function getHTML()
+    {
+        return sprintf('<a href="%s">%s</a>', $this->getUrl(),
+            $this->getCommitHash()->getHTML());
     }
 }

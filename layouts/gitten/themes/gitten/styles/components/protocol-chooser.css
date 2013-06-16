@@ -1,3 +1,10 @@
+/*
+ * Gitten - http://github.com/kayahr/gitten
+ * Copyright (C) 2013 Klaus Reimer <k@ailis.de>
+ * 
+ * Styles for the protocol chooser component.
+ */
+
 .gitten-protocol-chooser
 {
     position: relative;
@@ -55,7 +62,7 @@
     top: -9px;
     width: 17px;
     height: 9px;
-    background-image: url(images/popuparrow.png);
+    background-image: url(../../images/popuparrow.png);
     background-position: bottom center;
     background-repeat: no-repeat;    
 }

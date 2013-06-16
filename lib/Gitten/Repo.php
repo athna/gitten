@@ -465,31 +465,40 @@ final class Repo
      *
      * @param string $path
      *            Optional path. Defaults to root directory.
-     * @param int number
+     * @param int $number
      *            Optional number of commits to return. Defaults to 35.
+     * @param int $page
+     *            The page to display. Defaults to 0.
      * @return Commit[]
      *            The commits.
      */
-    public function getCommits($path = "", $number = 35)
+    public function getCommits($path = "", $number = 35, $page = 1, &$hasMore = null)
     {
         $commits = array();
-        $this->gitForEachLine(function($row) use (&$commits)
+        $repo = $this;
+        $this->gitForEachLine(function($row) use (&$commits, &$repo)
         {
             $cols = explode("\0", $row);
-            $commitHash = $cols[0];
-            $treeHash = $cols[1];
-            $parentHash = $cols[2];
+            $commitHash = new Hash($cols[0]);
+            $treeHash = new Hash($cols[1]);
+            $parentHash = new Hash($cols[2]);
             $authorDate = new DateTime($cols[3]);
             $author = new Contact($cols[4], $cols[5]);
             $committerDate = new DateTime($cols[6]);
             $committer = new Contact($cols[7], $cols[8]);
             $subject = $cols[9];
-            $commits[] = new Commit($commitHash, $treeHash,
+            $commits[] = new Commit($repo, $commitHash, $treeHash,
                     $parentHash, $authorDate, $author, $committerDate,
                     $committer, $subject);
-        }, "log", "-n", $number,
+        }, "log", "-n", $number + 1,
+        "--skip", max(0, $page - 1) * $number,
         "--format=format:%H%x00%T%x00%P%x00%at%x00%an%x00%ae%x00%ct%x00%cn%x00%ce%x00%s",
         $this->revisionHash, "--", $path);
+        if (count($commits) > $number)
+        {
+            array_pop($commits);
+            $hasMore = true;
+        } else $hasMore = false;
         return $commits;
     }
 
@@ -600,5 +609,33 @@ final class Repo
         global $cfg;
 
         return $cfg->getRepoBaseUrl($protocol) . "/" . $this->directory->getPath();
+    }
+
+    /**
+     * Returns the commit URL for the specified commit.
+     *
+     * @param Commit $commit
+     *            The commit.
+     * @return string
+     *             The commit URL.
+     */
+    public function getCommitUrl(Commit $commit)
+    {
+        return $this->directory->getPath() . "/commit/" . $commit->getCommitHash();
+    }
+
+    /**
+     * Returns the commits listing URL.
+     *
+     * @param int $page
+     *             The page number. Defaults to 1.
+     * @return string
+     *             The commits listing URL.
+     */
+    public function getCommitsUrl($page = 1)
+    {
+        $url = $this->directory->getPath() . "/commits/" . $this->revision;
+        if ($page > 1) $url .= "?page=" . $page;
+        return $url;
     }
 }

@@ -147,6 +147,18 @@ gitten.RevChooser.prototype.getRepoPath = function()
 };
 
 /**
+ * Returns the page ID.
+ * 
+ * @param {string}
+ *            The page ID.
+ * @private
+ */
+gitten.RevChooser.prototype.getPageId = function()
+{
+    return this.$.data("page-id");
+};
+
+/**
  * Loads the revisions from the server if not already done.
  * 
  * @private
@@ -186,7 +198,8 @@ gitten.RevChooser.prototype.receiveRevisions = function($list, revisions)
         revision = revisions[i];
         $item = jQuery("<li>");
         $link = jQuery("<a>");
-        $link.attr("href", this.getRepoPath() + "/tree/" + revision);
+        $link.attr("href", this.getRepoPath() + "/" + this.getPageId() + "/" 
+            + revision);
         $item.append($link);
         $link.text(revision);
         $list.append($item);
