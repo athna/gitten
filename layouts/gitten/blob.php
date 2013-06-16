@@ -10,7 +10,9 @@
     <div class="header">
       <ul class="actions buttons">
         <li><a href="<?=$repoFile->getRawUrl()?>">Raw</a></li>
-        <li><a href="#">Blame</a></li>
+        <? if (!$repoFile->isBinary()): ?>
+          <li><a href="#">Blame</a></li>
+        <? endif ?>
         <li><a href="#">History</a></li>
       </ul>
       <dl class="info">
@@ -25,7 +27,7 @@
         <? if ($repoFile->isImage()): ?>
           <? include "parts/blob/image.php" ?>
         <? else: ?>
-          Binary
+          Binary <?=$repoFile->getMimeType()?>
         <? endif ?>
       <? else: ?>
         <? if ($repoFile->getMimeType() == "text/x-web-markdown"): ?>

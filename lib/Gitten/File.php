@@ -205,7 +205,9 @@ abstract class File
      */
     public function isBinary()
     {
-        return !preg_match("/^text\\/.*/", $this->getMimeType());
+        $mimeType = $this->getMimeType();
+        if ($mimeType == "application/xml") return false;
+        return !preg_match("/^text\\/.*/", $mimeType);
     }
 
     /**
