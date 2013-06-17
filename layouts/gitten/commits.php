@@ -15,7 +15,7 @@
       <th>Message</th>
       <th>Date</th>
     </tr>
-    <? $commits = $repo->getCommits("", 30, $page, $hasMore) ?>
+    <? $commits = $repoFile->getCommits(30, $page, $hasMore) ?>
     <? foreach ($commits as $commit): ?>
       <tr>
         <td class="authorAvatar">
@@ -43,10 +43,10 @@
 
   <nav class="commits">
     <? if ($page > 1): ?>
-      <a href="<?=$repo->getCommitsUrl($page - 1)?>">Prev</a>
+      <a href="<?=$repoFile->getCommitsUrl($page - 1)?>">Prev</a>
     <? endif ?>
     <? if ($hasMore): ?>
-      <a href="<?=$repo->getCommitsUrl($page + 1)?>">Next</a>
+      <a href="<?=$repoFile->getCommitsUrl($page + 1)?>">Next</a>
     <? endif ?>
   </nav>
 

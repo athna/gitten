@@ -115,6 +115,19 @@ final class RepoFile extends File
     }
 
     /**
+     * Returns the commit history URL of this repository file.
+     *
+     * @param int $page
+     *             The page number. Defaults to 1.
+     * @return string
+     *             The commit history URL.
+     */
+    public function getCommitsUrl($page = 1)
+    {
+        return $this->repo->getCommitsUrl($this, $page);
+    }
+
+    /**
      * Returns the repository file name.
      *
      * @return string
@@ -305,5 +318,20 @@ final class RepoFile extends File
     {
         if (is_null($this->lineCount)) $this->readContent();
         return $this->lineCount;
+    }
+
+    /**
+     * Returns the commits for this repository file.
+     *
+     * @param int $number
+     *            Optional number of commits to return. Defaults to 35.
+     * @param int $page
+     *            The page to display. Defaults to 0.
+     * @return Commit[]
+     *            The commits.
+     */
+    public function getCommits($number = 35, $page = 1, &$hasMore = null)
+    {
+        return $this->repo->getCommits($this, $number, $page, $hasMore);
     }
 }

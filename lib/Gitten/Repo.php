@@ -478,8 +478,8 @@ final class Repo
     /**
      * Returns the commits for the specified path.
      *
-     * @param string $path
-     *            Optional path. Defaults to root directory.
+     * @param RepFile $repoFile
+     *            Optional repository file. Defaults to root directory.
      * @param int $number
      *            Optional number of commits to return. Defaults to 35.
      * @param int $page
@@ -487,7 +487,8 @@ final class Repo
      * @return Commit[]
      *            The commits.
      */
-    public function getCommits($path = "", $number = 35, $page = 1, &$hasMore = null)
+    public function getCommits(RepoFile $repoFile = null, $number = 35,
+        $page = 1, &$hasMore = null)
     {
         $commits = array();
         $repo = $this;
@@ -508,7 +509,7 @@ final class Repo
         }, "log", "-n", $number + 1,
         "--skip", max(0, $page - 1) * $number,
         "--format=format:%H%x00%T%x00%P%x00%at%x00%an%x00%ae%x00%ct%x00%cn%x00%ce%x00%s",
-        $this->revisionHash, "--", $path);
+        $this->revisionHash, "--", $repoFile->getPath());
         if (count($commits) > $number)
         {
             array_pop($commits);
@@ -587,7 +588,7 @@ final class Repo
         $cacheKey = "commit:" . $this->revisionHash . ":" . $localFile->getPath();
         $commit = $this->readCache($cacheKey);
         if ($commit) return $commit;
-        $commits = $this->getCommits($localFile->getPath(),  1);
+        $commits = $this->getCommits($localFile,  1);
         $commit = $commits[0];
         $this->writeCache($cacheKey, $commit);
         return $commit;
@@ -646,16 +647,19 @@ final class Repo
     }
 
     /**
-     * Returns the commits listing URL.
+     * Returns the commits history URL for the specified repository file.
      *
+     * @param RepoFile $repoFile
+     *             The repository file. null for root.
      * @param int $page
      *             The page number. Defaults to 1.
      * @return string
      *             The commits listing URL.
      */
-    public function getCommitsUrl($page = 1)
+    public function getCommitsUrl(RepoFile $repoFile = null, $page = 1)
     {
-        $url = $this->directory->getPath() . "/commits/" . $this->revision;
+        $url = $this->directory->getPath() . "/commits/" . $this->revision
+            . ($repoFile ? "/" . $repoFile->getPath() : "");
         if ($page > 1) $url .= "?page=" . $page;
         return $url;
     }

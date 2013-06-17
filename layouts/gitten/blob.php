@@ -13,7 +13,7 @@
         <? if (!$repoFile->isBinary()): ?>
           <li><a href="#">Blame</a></li>
         <? endif ?>
-        <li><a href="#">History</a></li>
+        <li><a href="<?=$repoFile->getCommitsUrl()?>">History</a></li>
       </ul>
       <dl class="info">
         <dt class="fileMode">File mode</dt>
