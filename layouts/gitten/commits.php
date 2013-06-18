@@ -25,6 +25,7 @@
         </td>
         <td class="hash">
           <?=$commit->getHTML()?>
+          <a class="browse" title="Browse the code at this point in the history" href="<?=$repoFile->getUrl($commit->getCommitHash())?>">&#xF061;</a>
         </td>
         <td class="message">
           <div class="shortened-text-container">

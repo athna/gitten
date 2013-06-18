@@ -95,12 +95,14 @@ final class RepoFile extends File
     /**
      * Returns the tree URL of this repository file.
      *
+     * @param string
+     *            Optional revision. Defaults to currently selected revision.
      * @return string
      *            The tree URL.
      */
-    public function getUrl()
+    public function getUrl($revision = null)
     {
-        return PHP_BASEURL . "/" . $this->repo->getFileUrl($this);
+        return $this->repo->getFileUrl($this, $revision);
     }
 
     /**

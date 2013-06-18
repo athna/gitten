@@ -127,7 +127,7 @@ final class Repo
     public function getShortRevision()
     {
         if (preg_match("/^[0-9a-f]{40}/", $this->revision))
-            return substr($this->revision, 0, 10);
+            return substr($this->revision, 0, 7);
         else
             return $this->revision;
     }
@@ -170,20 +170,23 @@ final class Repo
      *
      * @param RepoFile $repoFile
      *            The repository file.
+     * @param string $revision
+     *             Optional revision. Defaults to currently selected revision.
      * @return string
      *             The repository file tree URL.
      */
-    public function getFileUrl(RepoFile $repoFile)
+    public function getFileUrl(RepoFile $repoFile, $revision)
     {
+    	if (!$revision) $revision = $this->revision;
         if ($repoFile->isFile())
         {
         	return $this->directory->getPath() . "/blob/"
-                . $this->revision . "/" . $repoFile->getPath();
+                . $revision . "/" . $repoFile->getPath();
         }
         else
         {
             return $this->directory->getPath() . "/tree/"
-                . $this->revision . "/" . $repoFile->getPath();
+                . $revision . "/" . $repoFile->getPath();
         }
     }
 

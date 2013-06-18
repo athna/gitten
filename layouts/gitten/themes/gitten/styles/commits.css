@@ -49,6 +49,14 @@ table.commits td.authorAvatar .gravatar
 table.commits td.hash
 {
     font-family: "Liberation Mono", Courier, monospace;
+    white-space: nowrap;
+}
+
+table.commits td.hash .browse
+{
+    font-size: 11px;
+    font-family: icons;
+    vertical-align: top;
 }
 
 table.commits td.author
