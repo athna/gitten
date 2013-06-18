@@ -670,4 +670,29 @@ final class Repo
         if ($page > 1) $url .= "?page=" . $page;
         return $url;
     }
+
+    /**
+     * Renders the current commit.
+     */
+    public function renderCommit()
+    {
+    	$renderer = new CommitRenderer($this, $this->revisionHash);
+    	$this->gitForEachLine(array($renderer, "processLine"), "diff-tree",
+            "--numstat", "--raw", "--patch", "--no-renames",
+            "--pretty=format:%P", $this->revisionHash);
+    	$renderer->finish();
+    }
+
+    /**
+     * Returns the commit diff for the currently selected commit.
+     *
+     * @return CommitDiff
+     *            The commit diff for the currently selected commit.
+     */
+    public function getCommitDiff()
+    {
+    	$this->openGit("diff-tree", "--numstat", "--raw", "--patch",
+    	    "--no-renames", "--pretty=format:%P", $this->revisionHash);
+    	return new CommitDiff($this->gitPipes[1]);
+    }
 }
