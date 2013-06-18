@@ -19,6 +19,7 @@ table.commits th
     text-align: left;
     font-weight: bold;
     padding: 8px 16px;
+    background: #fff;
 }
 
 table.commits tr:hover
