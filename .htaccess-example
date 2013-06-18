@@ -1,6 +1,33 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /git/
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ index.php/$1 [L,NC]
-</IfModule>
+# ============================================================================
+# Example .htaccess file for Gitten
+#
+# To enable this file copy it to ".htaccess" and enable the settings you need
+# by removing the comment-characters. If your Apache doesn't allow .htaccess 
+# files then you have to copy the settings into your Apache configuration 
+# file manually.
+# ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# If you want to get rid of the "index.php" part in your Gitten URLs then
+# enable the following configuration and enter your web root path (Without
+# protocol and domain) in the "RewriteBase" setting.
+# ----------------------------------------------------------------------------
+
+#<IfModule mod_rewrite.c>
+#    RewriteEngine On
+#    RewriteBase /git/
+#    RewriteCond %{REQUEST_FILENAME} !-f
+#    RewriteRule ^(.*)$ index.php/$1 [L,NC]
+#</IfModule>
+
+
+# ----------------------------------------------------------------------------
+# Some Apache versions seems to use the mime type "application/x-font-woff"
+# for the WOFF webfonts which generate warnings in browsers like Chrome. If
+# you care about this (It's only a harmless warning, the fonts are working 
+# nonetheless) then you can set the correct mime type by enabling the
+# following configuration.
+# ----------------------------------------------------------------------------
+
+#AddType application/font-woff .woff
