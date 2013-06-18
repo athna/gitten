@@ -21,12 +21,11 @@ you.
 
 Not yet implemented stuff:
 
-* LocalFile/Blob viewer
 * Commit viewer
-* Commit history
 * Blame
 * Asynchronous loading of expensive commit info in tree
 * Better error handling (404 and stuff like that)
+* Commit navigation in revision chooser component
 
 
 ## Dependencies
