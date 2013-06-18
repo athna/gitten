@@ -1,4 +1,3 @@
-<? $pageId = "tree" ?>
 <? include "parts/header.php" ?>
 <? include "parts/file-breadcrumb.php" ?>
 <? include "parts/repo-nav.php" ?>

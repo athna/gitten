@@ -175,12 +175,16 @@ final class Repo
      */
     public function getFileUrl(RepoFile $repoFile)
     {
-        if ($repoFile->isDirectory())
+        if ($repoFile->isFile())
+        {
+        	return $this->directory->getPath() . "/blob/"
+                . $this->revision . "/" . $repoFile->getPath();
+        }
+        else
+        {
             return $this->directory->getPath() . "/tree/"
                 . $this->revision . "/" . $repoFile->getPath();
-        else
-            return $this->directory->getPath() . "/blob/"
-                . $this->revision . "/" . $repoFile->getPath();
+        }
     }
 
     /**

@@ -2,12 +2,16 @@
   <div class="content">
     <? include "components/rev-chooser.php"?>
     <? foreach ($repoFile->getParents() as $parent): ?>
-      <a href="<?=$parent->getUrl()?>/"><?=$parent->getName()?></a> /
+      <a href="<?=$view == "commits" ? $parent->getCommitsUrl() : $parent->getUrl()?>/">
+        <?=htmlspecialchars($parent->getName())?>
+      </a> /
     <? endforeach ?>
     <? if ($repoFile->isDirectory()): ?>
-      <a href="<?=$repoFile->getUrl()?>/"><?=$repoFile->getName()?></a> /
+      <a href="<?=$view == "commits" ? $repoFile->getCommitsUrl() : $repoFile->getUrl()?>/">
+        <?=htmlspecialchars($repoFile->getName())?>
+      </a> /
     <? else: ?>
-      <?=$repoFile->getName()?>
+      <?=htmlspecialchars($repoFile->getName())?>
     <? endif ?>
   </div>
 </nav>

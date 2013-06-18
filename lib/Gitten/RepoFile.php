@@ -150,6 +150,28 @@ final class RepoFile extends File
     }
 
     /**
+     * Checks if file is a file.
+     *
+     * @return boolean
+     *            True if file is a file, false if not.
+     */
+    public function isFile()
+    {
+    	return $this->getType() == "file";
+    }
+
+    /**
+     * Checks if file is not found.
+     *
+     * @return boolean
+     *            True if file is not found, false if not.
+     */
+    public function isNotFound()
+    {
+    	return $this->getType() == "notfound";
+    }
+
+    /**
      * Returns the file size.
      *
      * @return FileSize
@@ -222,9 +244,18 @@ final class RepoFile extends File
     private function readFileInfo()
     {
         $file = $this->repo->getFile($this->path);
-        $this->size = $file->getSize();
-        $this->mode = $file->getMode();
-        $this->type = $file->getType();
+        if ($file)
+        {
+	        $this->size = $file->getSize();
+	        $this->mode = $file->getMode();
+	        $this->type = $file->getType();
+        }
+        else
+        {
+        	$this->type = "notfound";
+        	$this->mode = new FileMode(0755);
+        	$this->size = new FileSize(0);
+        }
     }
 
     /**

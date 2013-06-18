@@ -1,12 +1,11 @@
-<? $pageId = "commits" ?>
 <? include "parts/header.php" ?>
 <? include "parts/file-breadcrumb.php" ?>
 <? include "parts/repo-nav.php" ?>
+<? include "parts/repo-breadcrumb.php" ?>
 
 <? $page = isset($_REQUEST["page"]) ? intval($_REQUEST["page"]) : 1 ?>
 
 <div class="content">
-  <? include "components/rev-chooser.php"?>
 
   <table class="commits">
     <tr>

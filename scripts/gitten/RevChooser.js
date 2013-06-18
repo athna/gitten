@@ -1,7 +1,7 @@
 /**
  * Constructs a new revision chooser component.
  * 
- * @param {!jQuery}
+ * @param {!jQuepry}
  *            The HTML element.
  * @constructor
  * @class
@@ -147,15 +147,27 @@ gitten.RevChooser.prototype.getRepoPath = function()
 };
 
 /**
- * Returns the page ID.
+ * Returns the view name.
  * 
  * @param {string}
- *            The page ID.
+ *            The view name.
  * @private
  */
-gitten.RevChooser.prototype.getPageId = function()
+gitten.RevChooser.prototype.getView = function()
 {
-    return this.$.data("page-id");
+    return this.$.data("view");
+};
+
+/**
+ * Returns the repository file path.
+ * 
+ * @param {string}
+ *            The repository file path.
+ * @private
+ */
+gitten.RevChooser.prototype.getRepoFile = function()
+{
+    return this.$.data("repo-file");
 };
 
 /**
@@ -198,8 +210,8 @@ gitten.RevChooser.prototype.receiveRevisions = function($list, revisions)
         revision = revisions[i];
         $item = jQuery("<li>");
         $link = jQuery("<a>");
-        $link.attr("href", this.getRepoPath() + "/" + this.getPageId() + "/" 
-            + revision);
+        $link.attr("href", this.getRepoPath() + "/" + this.getView() + "/" 
+            + revision + "/" + this.getRepoFile());
         $item.append($link);
         $link.text(revision);
         $list.append($item);
