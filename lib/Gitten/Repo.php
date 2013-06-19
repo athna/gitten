@@ -46,27 +46,6 @@ final class Repo
     /** @var string The cached description. Access it with getDescription(). */
     private $description;
 
-    /** @var string The executed Git command. */
-    private $gitCmd;
-
-    /** @var string The file name for recording Git error messages. */
-    private $gitErrorFile;
-
-    /** @var number The start time for benchmarking Git commands. */
-    private $gitStartTime;
-
-    /** @var resource The current Git process. */
-    private $gitProc;
-
-    /** @var array The Git process pipes. */
-    private $gitPipes;
-
-    /**
-     * @var array The benchmark statistics of all executed Git commands in
-     * this request.
-     */
-    private $gitBenchmark;
-
     /**
      * Constructs a new repository.
      *
