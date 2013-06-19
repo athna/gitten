@@ -101,27 +101,31 @@ final class Git
     /**
      * Reads a single line from the Git commands response.
      *
+     * @param boolean stripEOL
+     *             If EOL characters should be stripped. Defaults to true.
      * @return string
      *             The read line. False if end of response has been reached.
      */
-    public function readLine()
+    public function readLine($stripEOL = true)
     {
         $line = fgets($this->pipes[1]);
         if ($line === false) return false;
-        return trim($line, "\n\r");
+        return $stripEOL ? trim($line, "\n\r") : $line;
     }
 
     /**
      * Reads all lines from the Git command response and returns it as an
      * array of lines.
      *
+     * @param boolean stripEOL
+     *             If EOL characters should be stripped. Defaults to true.
      * @return string[]
      *             The Git command response as an array of lines.
      */
-    public function readLines()
+    public function readLines($stripEOL = true)
     {
         $lines = array();
-        while (($line = $this->readLine()) !== false)
+        while (($line = $this->readLine($stripEOL)) !== false)
         {
             $lines[] = $line;
         }
@@ -143,15 +147,18 @@ final class Git
      * Reads the response line by line and passes each line to the given
      * callback function.
      *
+     * @param boolean stripEOL
+     *             If EOL characters should be stripped. Defaults to true.
      * @param callback $callback
-     *            The callback function. The line is passed to it as first
-     *            argument. Lines always include the EOF character.
+     *            The callback function. The line with stripped EOF characters
+     *            is passed to it as first argument. The unstripped line is
+     *            passed as second argument.
      */
     public function forEachLine($callback)
     {
-        while (($line = fgets($this->pipes[1])) !== false)
+        while (($line = $this->readLine(false)) !== false)
         {
-            call_user_func($callback, $line);
+            call_user_func($callback, trim($line, "\r\n"), $line);
         }
     }
 
@@ -209,8 +216,9 @@ final class Git
      * @param Repo $repo
      *            The git repository.
      * @param callback $callback
-     *            The callback function to pass each line of the git command
-     *            result to. The lines include the EOF character.
+     *            The callback function. The line with stripped EOF characters
+     *            is passed to it as first argument. The unstripped line is
+     *            passed as second argument.
      * @param mixed $args___
      *            The git arguments.
      */

@@ -13,52 +13,58 @@ namespace Gitten;
  */
 class CommitFile
 {
-    /** The commit renderer. */
-    private $renderer;
+    /** The repository. */
+    private $repo;
 
-    /** The index inside the commit. */
+    /** The commit. */
+    private $commit;
+
+    /** @var int The index inside the commit. */
     private $index;
 
-    /** The filename. */
+    /** @var string The filename. */
     private $filename;
 
-    /** The change type (M, A, D, ...) */
+    /** @var string The change type (M, A, D, ...) */
     private $type;
 
-    /** The source file mode. */
+    /** @var FileMode The source file mode. */
     private $srcMode;
 
-    /** The destination file mode. */
+    /** @var FileMode The destination file mode. */
     private $destMode;
 
-    /** The source hash. */
+    /** @var Hash The source hash. */
     private $srcHash;
 
-    /** The destination hash. */
+    /** @var Hash The destination hash. */
     private $destHash;
 
-    /** The number of deletions. */
+    /** @var int The number of deletions. */
     private $deletions;
 
-    /** The number of additions. */
+    /** @var int The number of additions. */
     private $additions;
 
-    /** If file is binary or not. */
+    /** @var binary If file is binary or not. */
     private $binary;
 
     /**
      * Constructs a new commit file.
      *
-     * @param CommitRenderer $renderer
-     *            The commit renderer.
+     * @param Repo $repo
+     *            The repository.
+     * @param Commit $commit
+     *            The commit.
      * @param int $index
      *            The index inside the commit.
      * @param string $filename
      *            The filename.
      */
-    public function __construct(CommitRenderer $renderer, $index, $filename)
+    public function __construct(Repo $repo, Commit $commit, $index, $filename)
     {
-        $this->renderer = $renderer;
+        $this->repo = $repo;
+        $this->commit = $commit;
         $this->index = $index;
         $this->filename = $filename;
     }
@@ -68,17 +74,17 @@ class CommitFile
      *
      * @param string $type
      *            The change type.
-     * @param int $srcMode
+     * @param FileMode $srcMode
      *            The source file mode.
-     * @param int $destMode
+     * @param FileMode $destMode
      *            The destination file mode.
-     * @param string $srcHash
+     * @param Hash $srcHash
      *            The source hash.
-     * @param string $destHash
+     * @param Hash $destHash
      *            The destination hash.
      */
-    public function setRawData($type, $srcMode, $destMode, $srcHash,
-        $destHash)
+    public function setRawData($type, FileMode $srcMode, FileMode $destMode,
+        Hash $srcHash, Hash $destHash)
     {
         $this->type = strtolower($type);
         $this->srcMode = $srcMode;
@@ -138,9 +144,42 @@ class CommitFile
     }
 
     /**
+     * Check if file was deleted.
+     *
+     * @return boolean
+     *            True if file was deleted, false if not.
+     */
+    public function isDeletion()
+    {
+        return $this->type == "d";
+    }
+
+    /**
+     * Check if file was added.
+     *
+     * @return boolean
+     *            True if file was added, false if not.
+     */
+    public function isAddition()
+    {
+        return $this->type == "a";
+    }
+
+    /**
+     * Check if file was modified.
+     *
+     * @return boolean
+     *            True if file was modified,false if not.
+     */
+    public function isModification()
+    {
+        return $this->type == "m";
+    }
+
+    /**
      * Returns the source file mode.
      *
-     * @return int
+     * @return FileMode
      *            The source file mode.
      */
     public function getSrcMode()
@@ -151,7 +190,7 @@ class CommitFile
     /**
      * Returns the source file mode.
      *
-     * @return int
+     * @return FileMode
      *            The source file mode.
      */
     public function getDestMode()
@@ -195,7 +234,7 @@ class CommitFile
     /**
      * Returns the source hash.
      *
-     * @return string
+     * @return Hash
      *            The source hash.
      */
     public function getSrcHash()
@@ -206,81 +245,13 @@ class CommitFile
     /**
      * Returns the destination hash.
      *
-     * @return string
+     * @return Hash
      *            The destination hash.
      */
     public function getDestHash()
     {
         return $this->destHash;
     }
-
-    /**
-     * Returns the blob hash. This either the commit hash or (when file was
-     * deleted) the parent hash.
-     *
-     * @return string
-     *            The blob hash.
-     */
-    public function getBlobHash()
-    {
-        if ($this->type == "d")
-            return $this->renderer->getParentHash();
-        else
-            return $this->renderer->getCommitHash();
-    }
-
-    /**
-     * Returns the parent hash.
-     *
-     * @return string
-     *            The parent hash.
-     */
-    public function getParentHash()
-    {
-        return $this->renderer->getParentHash();
-    }
-
-    /**
-     * Returns the commit hash.
-     *
-     * @return string
-     *            The commit hash.
-     */
-    public function getCommitHash()
-    {
-        return $this->renderer->getCommitHash();
-    }
-
-    /**
-     * Returns the URL to the commit blob.
-     *
-     * @return string
-     *             The commit blob url or NULL if blob was deleted.
-     */
-    public function getCommitBlobUrl()
-    {
-        if ($this->type == "d") return null;
-        $revision = $this->getCommitHash();
-        $path = $this->filename;
-        $repoUrl = $this->renderer->getRepo()->getUrl();
-        return "$repoUrl/blob/$revision/$path";
-    }
-
-    /**
-     * Returns the URL to the parent blob.
-     *
-     * @return string
-     *             The parent blob url or NULL if blob was added.
-     */
-    public function getParentBlobUrl()
-    {
-        if ($this->type == "a") return null;
-        $revision = $this->getParentHash();
-        $path = $this->filename;
-        $repoUrl = $this->renderer->getRepo()->getUrl();
-        return "$repoUrl/blob/$revision/$path";
-    }
-
 
     /**
      * Checks if file is binary or not.
@@ -291,5 +262,45 @@ class CommitFile
     public function isBinary()
     {
         return $this->binary;
+    }
+
+    /**
+     * Returns the URL to the source file.
+     *
+     * @return string
+     *             The URL to the source file.
+     */
+    public function getSrcUrl()
+    {
+        return $this->repo->getBlobUrl($this->filename,
+            $this->commit->getParentHash()->getFull());
+    }
+
+    /**
+     * Returns the URL to the destination file.
+     *
+     * @return string
+     *             The URL to the destination file.
+     */
+    public function getDestUrl()
+    {
+        return $this->repo->getBlobUrl($this->filename,
+            $this->commit->getCommitHash()->getFull());
+    }
+
+    /**
+     * Returns the URL to the source file if file was deleted or the
+     * destination file if file was added or modified.
+     *
+     * @return string
+     *            The URL to the source or destination file depending on
+     *            the change type.
+     */
+    public function getUrl()
+    {
+        if ($this->isDeletion())
+            return $this->getSrcUrl();
+        else
+            return $this->getDestUrl();
     }
 }

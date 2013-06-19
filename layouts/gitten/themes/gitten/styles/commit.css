@@ -6,3 +6,86 @@
  */
 
 @import "common/gitten.css";
+
+.added-lines
+{
+    display: inline-block;
+    padding: 2px;
+    margin-bottom: 2px;
+    width: 50px;
+    background: #cfc;
+    color: #080;
+    text-align: center;
+}
+
+.deleted-lines
+{
+    display: inline-block;
+    padding: 2px;
+    margin-bottom: 2px;
+    width: 50px;
+    background: #fdd;
+    color: #f66;
+    text-align: center;
+}
+
+.files a
+{
+    margin-left: 10px;
+}
+
+.diff
+{
+    margin-top: 30px;
+}
+
+.diff .header
+{
+    border: solid 1px #ccc;
+    background: #eee;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+}
+
+.diff .header .filename
+{
+    padding: 15px 8px;
+    color: #444;
+}
+
+.diff .header .actions
+{
+    position: absolute;
+    right: 8px;
+    top: 8px;
+}
+
+.chunks
+{
+    width: 100%;
+    border-collapse: separate;
+}
+
+.chunks tr
+{
+    border-top: solid 10px #fff; 
+}
+
+.chunks td
+{
+    margin-top: 5px;
+    border-bottom: solid 1px #ccc; 
+    white-space: pre;
+    padding: 5px;
+}
+
+.chunks td.source-line-numbers,
+.chunks td.dest-line-numbers
+{
+    background: #eee;    
+}
+
+.chunks td.lines
+{
+    width: 100%;
+}

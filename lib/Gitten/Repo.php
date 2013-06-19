@@ -145,28 +145,59 @@ final class Repo
     }
 
     /**
-     * Returns the tree URL for the specified repository file.
+     * Returns the blob or tree URL for the specified repository file.
      *
      * @param RepoFile $repoFile
      *            The repository file.
      * @param string $revision
      *             Optional revision. Defaults to currently selected revision.
      * @return string
-     *             The repository file tree URL.
+     *             The repository file blob or tree URL.
      */
-    public function getFileUrl(RepoFile $repoFile, $revision)
+    public function getFileUrl(RepoFile $repoFile, $revision = null)
     {
-    	if (!$revision) $revision = $this->revision;
         if ($repoFile->isFile())
         {
-        	return $this->directory->getPath() . "/blob/"
-                . $revision . "/" . $repoFile->getPath();
+            return $this->getBlobUrl($repoFile->getPath(), $revision);
         }
         else
         {
-            return $this->directory->getPath() . "/tree/"
-                . $revision . "/" . $repoFile->getPath();
+            return $this->getTreeUrl($repoFile->getPath(), $revision);
         }
+    }
+
+    /**
+     * Returns the blob URL for the specified path.
+     *
+     * @param string $path
+     *             The path inside the repository.
+     * @param string $revision
+     *             Optional revision. Defaults to currently selected revision.
+     * @return string
+     *             The repository file blob URL.
+     */
+    public function getBlobUrl($path, $revision = null)
+    {
+    	if (!$revision) $revision = $this->revision;
+    	return $this->directory->getPath() . "/blob/"
+            . $revision . "/" . $path;
+    }
+
+    /**
+     * Returns the blob URL for the specified path.
+     *
+     * @param string $path
+     *             The path inside the repository.
+     * @param string $revision
+     *             Optional revision. Defaults to currently selected revision.
+     * @return string
+     *             The repository file tree URL.
+     */
+    public function getTreeUrl($path, $revision = null)
+    {
+        if (!$revision) $revision = $this->revision;
+        return $this->directory->getPath() . "/tree/"
+            . $revision . "/" . $path;
     }
 
     /**
@@ -489,10 +520,11 @@ final class Repo
     {
         $result = "";
         $lines = 0;
-        Git::execForEachLine($this, function($row) use (&$result, &$lines)
+        Git::execForEachLine($this, function($line, $lineWithEOF)
+            use (&$result, &$lines)
         {
             $lines++;
-            $result .= $row;
+            $result .= $lineWithEOF;
         }, "show", $this->revisionHash . ":" .$localFile->getPath());
         if (func_num_args() == 2) $lineCount = $lines;
         return $result;
@@ -517,13 +549,14 @@ final class Repo
      * Returns the commit URL for the specified commit.
      *
      * @param Commit $commit
-     *            The commit.
+     *            The commit. Optional. Defaults to current revision.
      * @return string
      *             The commit URL.
      */
-    public function getCommitUrl(Commit $commit)
+    public function getCommitUrl(Commit $commit = null)
     {
-        return $this->directory->getPath() . "/commit/" . $commit->getCommitHash();
+        $hash = $commit ? $commit->getCommitHash() : $this->revisionHash;
+        return $this->directory->getPath() . "/commit/" . $hash;
     }
 
     /**
@@ -545,15 +578,14 @@ final class Repo
     }
 
     /**
-     * Renders the current commit.
+     * Returns the hash of the currently selected revision.
+     *
+     * @return string
+     *            The current revision hash.
      */
-    public function renderCommit()
+    public function getRevisionHash()
     {
-    	$renderer = new CommitRenderer($this, $this->revisionHash);
-    	Git::execForEachLine($this, array($renderer, "processLine"),
-    	    "diff-tree", "--numstat", "--raw", "--patch", "--no-renames",
-            "--pretty=format:%P", $this->revisionHash);
-    	$renderer->finish();
+        return $this->revisionHash;
     }
 
     /**
@@ -564,8 +596,6 @@ final class Repo
      */
     public function getCommitDiff()
     {
-    	$this->openGit("diff-tree", "--numstat", "--raw", "--patch",
-    	    "--no-renames", "--pretty=format:%P", $this->revisionHash);
-    	return new CommitDiff($this->gitPipes[1]);
+        return new CommitDiff($this);
     }
 }

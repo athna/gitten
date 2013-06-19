@@ -13,13 +13,13 @@ namespace Gitten;
  */
 final class FileMode
 {
-    /** The file mode as numeric value. */
+    /** @var int The file mode as numeric value. */
     private $value;
 
     /**
      * Constructs a new file mode.
      *
-     * @param number $value
+     * @param int $value
      *            The file mode as numeric value.
      */
     public function __construct($value)
@@ -30,7 +30,7 @@ final class FileMode
     /**
      * Returns the file mode as numeric value.
      *
-     * @return number
+     * @return int
      *             The file mode as numeric value.
      */
     public function getValue()

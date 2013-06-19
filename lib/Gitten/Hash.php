@@ -17,7 +17,7 @@ final class Hash
      * The full SHA-1 hash as a string.
      * @var string
      */
-    private $has;
+    private $hash;
 
     /**
      * Constructs a new SHA-1 hash.
