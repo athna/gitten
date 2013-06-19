@@ -121,8 +121,8 @@ final class Repo
     {
         if (!$this->revisionType)
         {
-            $name = trim($this->gitString("rev-parse", "--symbolic-full-name",
-                $this->revision));
+            $name = trim(Git::exec($this, "rev-parse",
+                "--symbolic-full-name", $this->revision));
             if (preg_match("/^refs\/tags\/.*/", $name))
                 $this->revisionType = "tag";
             else if (preg_match("/^refs\/heads\/.*/", $name))
@@ -189,7 +189,7 @@ final class Repo
      * @return string
      *             The git directory.
      */
-    private function getGitDirectory()
+    public function getGitDirectory()
     {
         $dir = $this->directory->getAbsolutePath();
         $subDir = $dir . "/.git";
@@ -217,114 +217,6 @@ final class Repo
     }
 
     /**
-     * Opens git.
-     *
-     * @param mixed $args___
-     *            Variable number of arguments to pass to git.
-     * @throws GitException
-     *            When command could not be executed.
-     */
-    private function openGit($args___)
-    {
-        global $cfg;
-
-        $this->gitErrorFile = tempnam(sys_get_temp_dir(), "gitten");
-        $descriptors = array(
-            0 => array("pipe", "r"),
-            1 => array("pipe", "w"),
-            2 => array("file", $this->gitErrorFile, "w")
-        );
-        $args = array(
-            $cfg->getGit(),
-            "--git-dir",
-            escapeshellarg($this->getGitDirectory())
-        );
-        foreach (func_get_args() as $arg)
-            $args[] = escapeshellarg($arg);
-        $this->gitCmd = implode(" ", $args);
-        $this->gitStartTime = microtime(true);
-        $this->gitProc = proc_open($this->gitCmd, $descriptors,
-            $this->gitPipes);
-        if (!is_resource($this->gitProc))
-            throw new GitException($this->gitCmd, -1, $this->gitErrorFile);
-    }
-
-    /**
-     * Closes git.
-     */
-    private function closeGit()
-    {
-        $result = proc_close($this->gitProc);
-        $this->gitBenchmark[] = array(
-            "cmd" => $this->gitCmd,
-            "time" => microtime(true) - $this->gitStartTime
-        );
-        if ($result)
-            throw new GitException($this->gitCmd, $result,
-                $this->gitErrorFile);
-        unlink($this->gitErrorFile);
-    }
-
-    /**
-     * Executes a git command and returns the result as rows.
-     *
-     * @param string $rowDelimiter
-     *            The row delimiter.
-     * @param mixed $args___
-     *            Variable number of git arguments.
-     * @return string[]
-     *            The result rows.
-     */
-    private function gitRows($rowDelimiter, $args___)
-    {
-        $args = func_get_args();
-        array_shift($args);
-        call_user_func_array(array($this, "openGit"), $args);
-        $data = stream_get_contents($this->gitPipes[1]);
-        $this->closeGit();
-        $rows = explode($rowDelimiter, $data);
-        return $rows;
-    }
-
-    /**
-     * Executes a git command and returns the result as a string.
-     *
-     * @param mixed $args___
-     *            Variable number of git arguments.
-     * @return string
-     *            The result string.
-     */
-    private function gitString($args___)
-    {
-        $args = func_get_args();
-        call_user_func_array(array($this, "openGit"), $args);
-        $data = stream_get_contents($this->gitPipes[1]);
-        $this->closeGit();
-        return $data;
-    }
-
-    /**
-     * Executes a git command and passes the returned lines one
-     * by one to the specified callback function.
-     *
-     * @param callback $callback
-     *            The callback function.
-     * @param mixed $args___
-     *            Variable number of git arguments.
-     */
-    private function gitForEachLine($callback, $args___)
-    {
-        $args = func_get_args();
-        array_shift($args);
-        call_user_func_array(array($this, "openGit"), $args);
-        while ($line = fgets($this->gitPipes[1]))
-        {
-            call_user_func($callback, $line);
-        }
-        $this->closeGit();
-    }
-
-    /**
      * Returns all children of the specified directory.
      *
      * @param RepoFile $directory
@@ -337,7 +229,8 @@ final class Repo
         $children = array();
         $path = $directory->isRoot() ? "" : ($directory->getPath() . "/");
         $repo = $this;
-        $this->gitForEachLine(function($line) use ($path, &$children, $repo)
+        Git::execForEachLine($this, function($line) use ($path, &$children,
+            $repo)
         {
             $columns = preg_split('/\s+/', trim($line), 5);
             $mode = new FileMode(octdec($columns[0]));
@@ -367,7 +260,7 @@ final class Repo
     public function getFile($path)
     {
         $path = rtrim($path, "/");
-        $line = $this->gitString("ls-tree", "-l", $this->revisionHash, $path);
+        $line = Git::exec($this, "ls-tree", "-l", $this->revisionHash, $path);
         if (!$line) return null;
         $columns = preg_split('/\s+/', trim($line), 5);
         $mode = new FileMode(octdec($columns[0]));
@@ -412,7 +305,7 @@ final class Repo
         if (!is_null($this->branches)) return;
 
         $this->currentBranch = NULL;
-        $rows = $this->gitRows("\n", "branch");
+        $rows = Git::execForLines($this, "branch");
         $this->branches = array();
         foreach ($rows as $row)
         {
@@ -435,8 +328,8 @@ final class Repo
     {
         if (!is_null($this->tags)) return $this->tags;
 
-        $rows = $this->gitRows("\n", "for-each-ref", "--sort=taggerdate",
-                "--format=%(refname:short)", "refs/tags");
+        $rows = Git::execForLines($this, "for-each-ref", "--sort=taggerdate",
+            "--format=%(refname:short)", "refs/tags");
         $tags = array();
         foreach ($rows as $row)
         {
@@ -458,7 +351,8 @@ final class Repo
      */
     private function parseRev($revision)
     {
-        return trim($this->gitString("rev-parse", "-q", "--verify", $revision));
+        return trim(Git::exec($this, "rev-parse", "-q", "--verify",
+            $revision));
     }
 
     /**
@@ -478,7 +372,7 @@ final class Repo
     {
         $commits = array();
         $repo = $this;
-        $this->gitForEachLine(function($row) use (&$commits, &$repo)
+        Git::execForEachLine($this, function($row) use (&$commits, &$repo)
         {
             $cols = explode("\0", $row);
             $commitHash = new Hash($cols[0]);
@@ -595,7 +489,7 @@ final class Repo
     {
         $result = "";
         $lines = 0;
-        $this->gitForEachLine(function($row) use (&$result, &$lines)
+        Git::execForEachLine($this, function($row) use (&$result, &$lines)
         {
             $lines++;
             $result .= $row;
@@ -656,8 +550,8 @@ final class Repo
     public function renderCommit()
     {
     	$renderer = new CommitRenderer($this, $this->revisionHash);
-    	$this->gitForEachLine(array($renderer, "processLine"), "diff-tree",
-            "--numstat", "--raw", "--patch", "--no-renames",
+    	Git::execForEachLine($this, array($renderer, "processLine"),
+    	    "diff-tree", "--numstat", "--raw", "--patch", "--no-renames",
             "--pretty=format:%P", $this->revisionHash);
     	$renderer->finish();
     }

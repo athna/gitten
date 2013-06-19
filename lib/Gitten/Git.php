@@ -13,6 +13,9 @@ namespace Gitten;
  */
 final class Git
 {
+	/** @var Repo The repository. */
+	private $repo;
+
     /** @var string The executed Git command. */
     private $command;
 
@@ -43,11 +46,22 @@ final class Git
      * @param string $revision
      *            The selected revision.
      */
-    public function __construct(Repo $repo, $args__)
+    public function __construct(Repo $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    /**
+     * Opens the git command with the specified arguments.
+     *
+     * @param mixed $args__
+     *            The git command arguments.
+     */
+    public function open($args__)
     {
         global $cfg;
 
-        $this->errorFile = tempnam(sys_get_temp_dir(), "gitten");
+    	$this->errorFile = tempnam(sys_get_temp_dir(), "gitten");
         $descriptors = array(
             0 => array("pipe", "r"),
             1 => array("pipe", "w"),
@@ -56,7 +70,7 @@ final class Git
         $args = array(
             $cfg->getGit(),
             "--git-dir",
-            escapeshellarg($repo->getGitDirectory())
+            escapeshellarg($this->repo->getGitDirectory())
         );
         foreach (func_get_args() as $arg)
             $args[] = escapeshellarg($arg);
@@ -71,7 +85,7 @@ final class Git
      * Finishes the execution of the git command. Closes all file
      * descriptors and cleans up temporary files.
      */
-    private function closeGit()
+    private function close()
     {
         $result = proc_close($this->proc);
         self::$benchmark[] = array(
@@ -92,7 +106,9 @@ final class Git
      */
     public function readLine()
     {
-        return fgets($this->pipes[1]);
+        $line = fgets($this->pipes[1]);
+        if ($line === false) return false;
+        return trim($line, "\n\r");
     }
 
     /**
@@ -128,14 +144,84 @@ final class Git
      * callback function.
      *
      * @param callback $callback
-     *            The callback function.
+     *            The callback function. The line is passed to it as first
+     *            argument. Lines always include the EOF character.
      */
-    private function forEachLine($callback, $args___)
+    public function forEachLine($callback)
     {
-        while (($line = $this->readLine()) !== false)
+        while (($line = fgets($this->pipes[1])) !== false)
         {
             call_user_func($callback, $line);
         }
-        $this->closeGit();
+    }
+
+    /**
+     * Short form for executing a Git command and returning the result as a
+     * string. This method automatically opens and closes the Git command line
+     * interface.
+     *
+     * @param Repo $repo
+     *            The git repository.
+     * @param mixed $args___
+     *            The git arguments.
+     * @return string
+     *            The git command result.
+     */
+    public static function exec(Repo $repo, $args___)
+    {
+    	$git = new Git($repo);
+    	$args = func_get_args();
+    	array_shift($args);
+    	call_user_func_array(array($git, "open"), $args);
+    	$result = $git->read();
+    	$git->close();
+    	return $result;
+    }
+
+    /**
+     * Short form for executing a Git command and returning the result as a
+     * list of lines. This method automatically opens and closes the Git
+     * command line interface.
+     *
+     * @param Repo $repo
+     *            The git repository.
+     * @param mixed $args___
+     *            The git arguments.
+     * @return string[]
+     *            The git command result as a list of lines.
+     */
+    public static function execForLines(Repo $repo, $args___)
+    {
+    	$git = new Git($repo);
+    	$args = func_get_args();
+    	array_shift($args);
+    	call_user_func_array(array($git, "open"), $args);
+    	$result = $git->readLines();
+    	$git->close();
+    	return $result;
+    }
+
+    /**
+     * Short form for executing a Git command and passing each line of the result
+     * to a callback function. This method automatically opens and closes the Git
+     * command line interface.
+     *
+     * @param Repo $repo
+     *            The git repository.
+     * @param callback $callback
+     *            The callback function to pass each line of the git command
+     *            result to. The lines include the EOF character.
+     * @param mixed $args___
+     *            The git arguments.
+     */
+    public static function execForEachLine(Repo $repo, $callback, $args___)
+    {
+    	$git = new Git($repo);
+    	$args = func_get_args();
+    	array_shift($args);
+    	array_shift($args);
+    	call_user_func_array(array($git, "open"), $args);
+    	$git->forEachLine($callback);
+    	$git->close();
     }
 }
